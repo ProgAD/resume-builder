@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Resume - Resume Builder</title>
+    <style>
+        /* ==================== COMMON STYLES (styles.css) ==================== */
+        
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.3;
+            color: #1f2937;
+        }
+
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.5rem; }
+        h3 { font-size: 1.25rem; }
+
+        /* Colors */
+        :root {
+            --primary-color: #2563EB;
+            --primary-dark: #1e40af;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --bg-light: #f5f7fa;
+            --border-color: #e5e7eb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Utilities */
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+
+        /* ==================== PAGE SPECIFIC STYLES ==================== */
+
+        /* Header */
+        .page-header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 15px 0;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--primary-dark);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Section Styles */
+        .resume-section {
+            margin-bottom: 25px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: var(--primary-dark);
+        }
+
+        .section-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .section-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .collapse-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .collapse-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .delete-section-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .delete-section-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .section-content {
+            padding: 20px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .section-content.collapsed {
+            display: none;
+        }
+
+        /* Dynamic Row Styles */
+        .dynamic-row {
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            position: relative;
+            background: #f9fafb;
+        }
+
+        .remove-row-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .remove-row-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        .add-row-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .add-row-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Skills Tags */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .skill-tag {
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .skill-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .skill-input-row input {
+            flex: 1;
+        }
+
+        /* Bottom Actions */
+        .bottom-actions {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+            margin-top: 30px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container header-content">
+            <a href="#" class="back-btn" onclick="handleBack()">
+                <span>←</span>
+                <span>Back to Dashboard</span>
+            </a>
+            <h1 class="page-title">Create New Resume</h1>
+            <div style="width: 150px;"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- User Info Card -->
+        <div class="card">
+            <h2 class="mb-3">Personal Information</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Full Name *</label>
+                    <input type="text" class="form-input" placeholder="John Doe" value="John Doe">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" placeholder="john.doe@example.com" value="john.doe@example.com">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Contact Number *</label>
+                    <input type="tel" class="form-input" placeholder="+1 234 567 8900" value="+1 234 567 8900">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-input" placeholder="123 Main Street, City, State, ZIP" value="123 Main Street, New York, NY 10001">
+                </div>
+            </div>
+        </div>
+
+        <!-- Objective Section -->
+        <div class="resume-section" id="section-objective">
+            <div class="section-header" onclick="toggleSection('objective')">
+                <div class="section-header-left">
+                    <h3 class="section-title">Career Objective</h3>
+                </div>
+                <div class="section-actions">
+                    <button class="delete-section-btn" onclick="deleteSection(event, 'section-objective')">🗑️ Delete</button>
+                    <span class="collapse-icon" id="icon-objective">▼</span>
+                </div>
+            </div>
+            <div class="section-content" id="content-objective">
+                <div class="form-group">
+                    <label class="form-label">Objective Statement</label>
+                    <textarea class="form-textarea" placeholder="Write your career objective...">A highly motivated and results-driven professional seeking challenging opportunities to leverage my skills and experience in software development. Committed to continuous learning and contributing to innovative projects.</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="resume-section" id="section-education">
+            <div class="section-header" onclick="toggleSection('education')">
+                <div class="section-header-left">
+                    <h3 class="section-title">Educational Qualification</h3>
+                </div>
+                <div class="section-actions">
+                    <button class="delete-section-btn" onclick="deleteSection(event, 'section-education')">🗑️ Delete</button>
+                    <span class="collapse-icon" id="icon-education">▼</span>
+                </div>
+            </div>
+            <div class="section-content" id="content-education">
+                <div id="education-rows">
+                    <div class="dynamic-row">
+                        <button class="remove-row-btn" onclick="removeRow(this)">×</button>
+                        <div class="form-group">
+                            <label class="form-label">Degree</label>
+                            <input type="text" class="form-input" placeholder="e.g., Bachelor of Science" value="Bachelor of Science in Computer Science">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Institution</label>
+                                <input type="text" class="form-input" placeholder="University Name" value="Stanford University">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Year</label>
+                                <input type="text" class="form-input" placeholder="2020" value="2018 - 2022">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dynamic-row">
+                        <button class="remove-row-btn" onclick="removeRow(this)">×</button>
+                        <div class="form-group">
+                            <label class="form-label">Degree</label>
+                            <input type="text" class="form-input" placeholder="e.g., Bachelor of Science" value="High School Diploma">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Institution</label>
+                                <input type="text" class="form-input" placeholder="University Name" value="Lincoln High School">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Year</label>
+                                <input type="text" class="form-input" placeholder="2020" value="2014 - 2018">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-row-btn" onclick="addEducationRow()">+ Add Education</button>
+            </div>
+        </div>
+
+        <!-- Work Experience Section -->
+        <div class="resume-section" id="section-experience">
+            <div class="section-header" onclick="toggleSection('experience')">
+                <div class="section-header-left">
+                    <h3 class="section-title">Work Experience</h3>
+                </div>
+                <div class="section-actions">
+                    <button class="delete-section-btn" onclick="deleteSection(event, 'section-experience')">🗑️ Delete</button>
+                    <span class="collapse-icon" id="icon-experience">▼</span>
+                </div>
+            </div>
+            <div class="section-content" id="content-experience">
+                <div id="experience-rows">
+                    <div class="dynamic-row">
+                        <button class="remove-row-btn" onclick="removeRow(this)">×</button>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Company</label>
+                                <input type="text" class="form-input" placeholder="Company Name" value="Tech Solutions Inc.">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Role</label>
+                                <input type="text" class="form-input" placeholder="Job Title" value="Senior Software Engineer">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Duration</label>
+                            <input type="text" class="form-input" placeholder="e.g., Jan 2020 - Present" value="June 2022 - Present">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-textarea" placeholder="Describe your responsibilities and achievements...">Led development of cloud-based applications using React and Node.js. Managed a team of 5 developers and improved system performance by 40%.</textarea>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-row-btn" onclick="addExperienceRow()">+ Add Experience</button>
+            </div>
+        </div>
+
+        <!-- Key Skills Section -->
+        <div class="resume-section" id="section-skills">
+            <div class="section-header" onclick="toggleSection('skills')">
+                <div class="section-header-left">
+                    <h3 class="section-title">Key Skills</h3>
+                </div>
+                <div class="section-actions">
+                    <button class="delete-section-btn" onclick="deleteSection(event, 'section-skills')">🗑️ Delete</button>
+                    <span class="collapse-icon" id="icon-skills">▼</span>
+                </div>
+            </div>
+            <div class="section-content" id="content-skills">
+                <div class="skills-container" id="skills-container">
+                    <div class="skill-tag">
+                        <span>JavaScript</span>
+                        <span class="skill-remove" onclick="removeSkill(this)">×</span>
+                    </div>
+                    <div class="skill-tag">
+                        <span>React</span>
+                        <span class="skill-remove" onclick="removeSkill(this)">×</span>
+                    </div>
+                    <div class="skill-tag">
+                        <span>Node.js</span>
+                        <span class="skill-remove" onclick="removeSkill(this)">×</span>
+                    </div>
+                    <div class="skill-tag">
+                        <span>Python</span>
+                        <span class="skill-remove" onclick="removeSkill(this)">×</span>
+                    </div>
+                    <div class="skill-tag">
+                        <span>SQL</span>
+                        <span class="skill-remove" onclick="removeSkill(this)">×</span>
+                    </div>
+                </div>
+                <div class="skill-input-row">
+                    <input type="text" class="form-input" id="skill-input" placeholder="Enter a skill">
+                    <button class="add-row-btn" onclick="addSkill()">+ Add Skill</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Competencies Section -->
+        <div class="resume-section" id="section-competencies">
+            <div class="section-header" onclick="toggleSection('competencies')">
+                <div class="section-header-left">
+                    <h3 class="section-title">Key Competencies</h3>
+                </div>
+                <div class="section-actions">
+                    <button class="delete-section-btn" onclick="deleteSection(event, 'section-competencies')">🗑️ Delete</button>
+                    <span class="collapse-icon" id="icon-competencies">▼</span>
+                </div>
+            </div>
+            <div class="section-content" id="content-competencies">
+                <div class="form-group">
+                    <textarea class="form-textarea" placeholder="List your key competencies (one per line)...">• Team Leadership & Management
+• Agile & Scrum Methodologies
+• Problem Solving & Critical Thinking
+• Effective Communication
+• Project Planning & Execution</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Details Section -->
+        <div class="resume-section" id="section-personal">
+            <div class="section-header" onclick="toggleSection('personal')">
+                <div class="section-header-left">
+                    <h3 class="section-title">Personal Details</h3>
+                </div>
+                <div class="section-actions">
+                    <button class="delete-section-btn" onclick="deleteSection(event, 'section-personal')">🗑️ Delete</button>
+                    <span class="collapse-icon" id="icon-personal">▼</span>
+                </div>
+            </div>
+            <div class="section-content" id="content-personal">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" class="form-input" value="1995-05-15">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nationality</label>
+                        <input type="text" class="form-input" placeholder="e.g., American" value="American">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Languages Known</label>
+                        <input type="text" class="form-input" placeholder="e.g., English, Spanish" value="English, Spanish, French">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Marital Status</label>
+                        <select class="form-select">
+                            <option>Single</option>
+                            <option>Married</option>
+                            <option>Prefer not to say</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Declaration Section -->
+        <div class="resume-section" id="section-declaration">
+            <div class="section-header" onclick="toggleSection('declaration')">
+                <div class="section-header-left">
+                    <h3 class="section-title">Declaration</h3>
+                </div>
+                <div class="section-actions">
+                    <button class="delete-section-btn" onclick="deleteSection(event, 'section-declaration')">🗑️ Delete</button>
+                    <span class="collapse-icon" id="icon-declaration">▼</span>
+                </div>
+            </div>
+            <div class="section-content" id="content-declaration">
+                <div class="form-group">
+                    <textarea class="form-textarea" placeholder="Write your declaration...">I hereby declare that the information provided above is true and accurate to the best of my knowledge. I understand that any false information may result in the rejection of my application or termination of employment.</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="bottom-actions">
+        <div class="container">
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="handleCancel()">Cancel</button>
+                <button class="btn btn-success" onclick="handlePreview()">👁️ Preview Resume</button>
+                <button class="btn btn-primary" onclick="handleSave()">💾 Save Resume</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle Section Collapse
+        function toggleSection(sectionId) {
+            const content = document.getElementById(`content-${sectionId}`);
+            const icon = document.getElementById(`icon-${sectionId}`);
+            
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+        }
+
+        // Delete Section
+        function deleteSection(event, sectionId) {
+            event.stopPropagation();
+            const confirmDelete = confirm('Are you sure you want to delete this section?');
+            if (confirmDelete) {
+                document.getElementById(sectionId).remove();
+            }
+        }
+
+        // Remove Dynamic Row
+        function removeRow(button) {
+            button.parentElement.remove();
+        }
+
+        // Add Education Row
+        function addEducationRow() {
+            const container = document.getElementById('education-rows');
+            const newRow = document.createElement('div');
+            newRow.className = 'dynamic-row';
+            newRow.innerHTML = `
+                <button class="remove-row-btn" onclick="removeRow(this)">×</button>
+                <div class="form-group">
+                    <label class="form-label">Degree</label>
+                    <input type="text" class="form-input" placeholder="e.g., Bachelor of Science">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Institution</label>
+                        <input type="text" class="form-input" placeholder="University Name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Year</label>
+                        <input type="text" class="form-input" placeholder="2020">
+                    </div>
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        // Add Experience Row
+        function addExperienceRow() {
+            const container = document.getElementById('experience-rows');
+            const newRow = document.createElement('div');
+            newRow.className = 'dynamic-row';
+            newRow.innerHTML = `
+                <button class="remove-row-btn" onclick="removeRow(this)">×</button>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Company</label>
+                        <input type="text" class="form-input" placeholder="Company Name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Role</label>
+                        <input type="text" class="form-input" placeholder="Job Title">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Duration</label>
+                    <input type="text" class="form-input" placeholder="e.g., Jan 2020 - Present">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" placeholder="Describe your responsibilities and achievements..."></textarea>
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        // Add Skill
+        function addSkill() {
+            const input = document.getElementById('skill-input');
+            const skillName = input.value.trim();
+            
+            if (skillName) {
+                const container = document.getElementById('skills-container');
+                const skillTag = document.createElement('div');
+                skillTag.className = 'skill-tag';
+                skillTag.innerHTML = `
+                    <span>${skillName}</span>
+                    <span class="skill-remove" onclick="removeSkill(this)">×</span>
+                `;
+                container.appendChild(skillTag);
+                input.value = '';
+            }
+        }
+
+        // Remove Skill
+        function removeSkill(element) {
+            element.parentElement.remove();
+        }
+
+        // Allow Enter key to add skill
+        document.addEventListener('DOMContentLoaded', function() {
+            const skillInput = document.getElementById('skill-input');
+            skillInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkill();
+                }
+            });
+        });
+
+        // Action Handlers
+        function handleBack() {
+            const confirmLeave = confirm('Are you sure you want to go back? Any unsaved changes will be lost.');
+            if (confirmLeave) {
+                alert('Redirecting to Dashboard...');
+                // window.location.href = 'dashboard.html';
+            }
+        }
+
+        function handleCancel() {
+            const confirmCancel = confirm('Are you sure you want to cancel? All changes will be lost.');
+            if (confirmCancel) {
+                alert('Cancelled. Redirecting to Dashboard...');
+                // window.location.href = 'dashboard.html';
+            }
+        }
+
+        function handlePreview() {
+            alert('Opening Resume Preview...\n\nIn a real app, this would show a formatted preview of your resume.');
+            console.log('Preview Resume clicked');
+        }
+
+        function handleSave() {
+            alert('Resume saved successfully! ✓\n\nIn a real app, this would save your resume to the database.');
+            console.log('Save Resume clicked');
+        }
+    </script>
+</body>
+</html>
