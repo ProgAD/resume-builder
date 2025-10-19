@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         header("Location: ../../dashboard.php");
         exit();
     }else{
-        header("Location: ../../index.php?error=invalid_credentials");
+        header("Location: logout.php");
         exit();
     }
 }
