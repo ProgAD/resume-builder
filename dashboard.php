@@ -1,3 +1,10 @@
+<?php
+session_start();
+if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
+    header("Location: actions/auth/logout.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -834,13 +841,13 @@
         }
 
         function handleCreateNew() {
-            alert('Redirecting to Create Resume page...');
+            window.location.href = 'build.php?req=new';
         }
 
         function handleLogout() {
             const confirmed = confirm('Are you sure you want to logout?');
             if (confirmed) {
-                alert('Logging out...\nRedirecting to login page.');
+                window.location.href = 'actions/auth/logout.php'; // Redirect to logout script
             }
         }
     </script>

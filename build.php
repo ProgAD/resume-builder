@@ -1,3 +1,10 @@
+<?php
+session_start();
+if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
+    header("Location: actions/auth/logout.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -564,13 +571,14 @@
                 <span>📄</span>
                 Resume Builder
             </a>
-            <button class="btn btn-secondary back-btn" onclick="handleBack()">
+            <button class="btn btn-secondary back-btn" onclick="window.location.href = 'dashboard.php'">
                 ← <span>Back to Dashboard</span>
             </button>
         </div>
     </nav>
 
     <div class="container">
+        <form id="resumeForm" method="POST" action="actions/resume/create_resume.php">
         <div class="page-header">
             <h1>Create New Resume</h1>
             <p>Fill in the details below to create your professional resume</p>
@@ -821,8 +829,9 @@
         <div class="form-actions">
             <button class="btn btn-secondary" onclick="handleCancel()">Cancel</button>
             <button class="btn btn-primary" onclick="handlePreview()">👁️ Preview Resume</button>
-            <button class="btn btn-primary" onclick="handleSave()">💾 Save Resume</button>
+            <button type="submit" class="btn btn-primary">💾 Save Resume</button>
         </div>
+        </form>
     </div>
 
     <script>
@@ -1031,14 +1040,6 @@
             }
         });
 
-        function handleSave() {
-            const name = document.getElementById('fullName').value.trim();
-            if (!name) {
-                alert('Please enter your full name before saving!');
-                return;
-            }
-            alert(`✅ Resume saved successfully for ${name}!\n\nIn a real application, this would save the data to a database.`);
-        }
 
         function handlePreview() {
             const name = document.getElementById('fullName').value.trim();
@@ -1055,11 +1056,11 @@
             }
         }
 
-        function handleBack() {
-            if (confirm('Are you sure you want to go back? Any unsaved changes will be lost.')) {
-                alert('Redirecting to Dashboard...');
-            }
-        }
+        // function handleBack() {
+        //     if (confirm('Are you sure you want to go back? Any unsaved changes will be lost.')) {
+        //         alert('Redirecting to Dashboard...');
+        //     }
+        // }
     </script>
 </body>
 </html>
