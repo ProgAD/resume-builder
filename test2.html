@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Resume Builder</title>
+    <title>Create New Resume - Resume Builder</title>
     <style>
-        /* ==================== COMMON STYLES (styles.css) ==================== */
-        
-        /* Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -20,34 +17,26 @@
             color: #333;
             background: #f5f7fa;
             min-height: 100vh;
+            padding-bottom: 40px;
         }
 
-        /* Typography */
         h1, h2, h3, h4, h5, h6 {
             font-weight: 600;
             line-height: 1.3;
             color: #1f2937;
         }
 
-        h1 { font-size: 2rem; }
-        h2 { font-size: 1.5rem; }
-        h3 { font-size: 1.25rem; }
-
-        /* Colors */
         :root {
             --primary-color: #0D9488;
             --primary-dark: #0a7a70;
             --secondary-color: #64748b;
-            --success-color: #10b981;
             --danger-color: #ef4444;
-            --warning-color: #f59e0b;
             --bg-light: #f5f7fa;
             --border-color: #e5e7eb;
             --text-primary: #1f2937;
             --text-secondary: #6b7280;
         }
 
-        /* Buttons */
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -82,84 +71,22 @@
             background: #475569;
         }
 
-        .btn-danger {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 0.85rem;
-        }
-
-        /* Cards */
         .card {
             background: white;
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
             border: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
 
-        .card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            transform: translateY(-3px);
-        }
-
-        /* Container */
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* Grid System */
-        .grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
-        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
-
-        @media (max-width: 768px) {
-            .grid-cols-2, .grid-cols-3, .grid-cols-4 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .grid-cols-3, .grid-cols-4 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* Utilities */
-        .mt-1 { margin-top: 0.5rem; }
-        .mt-2 { margin-top: 1rem; }
-        .mt-3 { margin-top: 1.5rem; }
-        .mt-4 { margin-top: 2rem; }
-        .mb-1 { margin-bottom: 0.5rem; }
-        .mb-2 { margin-bottom: 1rem; }
-        .mb-3 { margin-bottom: 1.5rem; }
-        .mb-4 { margin-bottom: 2rem; }
-        .text-center { text-align: center; }
-        .text-muted { color: var(--text-secondary); }
-        .flex { display: flex; }
-        .justify-between { justify-content: space-between; }
-        .align-center { align-items: center; }
-        .gap-2 { gap: 0.5rem; }
-
-        /* ==================== DASHBOARD SPECIFIC STYLES ==================== */
-
-        /* Header/Navbar */
+        /* Navbar */
         .navbar {
             background: white;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -186,672 +113,953 @@
             gap: 8px;
         }
 
-        .navbar-user {
+        .back-btn {
+            padding: 8px 16px;
+            font-size: 0.85rem;
             display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Photo Upload */
+        .photo-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .photo-container {
+            display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 15px;
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
+        .photo-preview {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background: var(--primary-color);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .logout-btn {
-            padding: 8px 16px;
-            font-size: 0.85rem;
-        }
-
-        /* My Resume Section */
-        .my-resume-section {
-            margin-bottom: 40px;
-        }
-
-        .my-resume-card {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            border-radius: 16px;
-            padding: 30px;
-            color: white;
-            position: relative;
+            font-size: 3rem;
+            font-weight: 700;
             overflow: hidden;
-            border: none;
+            border: 4px solid #e5e7eb;
         }
 
-        .my-resume-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            pointer-events: none;
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .my-resume-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(13, 148, 136, 0.4);
-        }
-
-        .my-resume-content {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
-
-        .my-resume-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: white;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            flex-shrink: 0;
-        }
-
-        .my-resume-info {
-            flex: 1;
-        }
-
-        .my-resume-name {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .my-resume-status {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-bottom: 15px;
-        }
-
-        .my-resume-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .my-resume-actions .btn {
-            background: white;
-            color: var(--primary-color);
-        }
-
-        .my-resume-actions .btn:hover {
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Others Section */
-        .others-section {
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-
-        /* Resume Card */
-        .resume-card {
-            text-align: center;
-            position: relative;
-        }
-
-        .resume-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
+        .photo-upload-btn {
+            display: inline-block;
+            padding: 8px 20px;
             background: var(--primary-color);
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 0 auto 15px;
-        }
-
-        .resume-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 5px;
-        }
-
-        .resume-status {
+            border-radius: 8px;
+            cursor: pointer;
             font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
-        .resume-actions {
-            display: flex;
-            flex-direction: column;
+        .photo-upload-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .photo-upload-btn input[type="file"] {
+            display: none;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 15px;
+            transition: all 0.4s ease;
+        }
+
+        .form-section.deleting {
+            animation: slideOut 0.4s ease forwards;
+        }
+
+        @keyframes slideOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                max-height: 2000px;
+            }
+            50% {
+                opacity: 0.5;
+                transform: translateY(-10px) scale(0.95);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.9);
+                max-height: 0;
+                margin-bottom: 0;
+                padding: 0;
+            }
+        }
+
+        .form-section.section-hidden {
+            display: none;
+        }
+
+        .add-section-placeholder {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 2px dashed var(--border-color);
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.9);
+            }
+            50% {
+                opacity: 0.5;
+                transform: translateY(-10px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .restore-section-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
             gap: 8px;
         }
 
-        .resume-actions .btn-primary {
-            width: 100%;
+        .restore-section-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
         }
 
-        /* Icon Actions Row */
-        .icon-actions {
+        .section-header {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+        }
+
+        .section-header h3 {
+            color: white;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .delete-section-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .delete-section-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .collapse-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .section-header.collapsed .collapse-icon {
+            transform: rotate(-180deg);
+        }
+
+        .section-content {
+            padding: 20px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 2000px;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease, opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .section-content.hidden {
+            max-height: 0;
+            padding: 0 20px;
+            opacity: 0;
+            border: none;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        /* Dynamic Rows */
+        .dynamic-section {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            padding-top: 40px;
+            margin-bottom: 15px;
+            position: relative;
+            background: #fafafa;
+        }
+
+        .remove-row-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .remove-row-btn:hover {
+            background: #dc2626;
+        }
+
+        .add-more-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .add-more-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Skills & Tags */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
             gap: 8px;
             margin-top: 10px;
         }
 
-        .icon-btn {
-            padding: 8px 12px;
-            border-radius: 8px;
+        .skill-tag {
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 6px;
+        }
+
+        .remove-skill {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .skill-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .skill-input-group input {
+            flex: 1;
+        }
+
+        /* Objective Options */
+        .objective-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .objective-option {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
-            border: none;
-            font-weight: 600;
         }
 
-        .icon-btn-share {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .icon-btn-share:hover {
-            background: #2563eb;
-            transform: translateY(-2px);
-        }
-
-        .icon-btn-edit {
-            background: #64748b;
-            color: white;
-        }
-
-        .icon-btn-edit:hover {
-            background: #475569;
-            transform: translateY(-2px);
-        }
-
-        .icon-btn-view {
-            background: #10b981;
-            color: white;
-        }
-
-        .icon-btn-view:hover {
-            background: #059669;
-            transform: translateY(-2px);
-        }
-
-        .icon-btn-delete {
-            background: #ef4444;
-            color: white;
-        }
-
-        .icon-btn-delete:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-        }
-
-        /* Create New Card */
-        .create-card {
-            border: 2px dashed var(--primary-color);
+        .objective-option:hover {
+            border-color: var(--primary-color);
             background: rgba(13, 148, 136, 0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 250px;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .create-card:hover {
+        .objective-option.selected {
+            border-color: var(--primary-color);
             background: rgba(13, 148, 136, 0.1);
-            border-color: var(--primary-dark);
-            transform: translateY(-3px);
-        }
-
-        .create-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 35px;
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .create-text {
-            font-size: 1.1rem;
             font-weight: 600;
-            color: var(--primary-color);
         }
 
-        /* Modal Styles */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.show {
+        /* Form Actions */
+        .form-actions {
             display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
         }
 
-        .modal-content {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            max-width: 450px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.3s ease;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--text-primary);
-        }
-
-        .modal-message {
+        .form-actions .btn {
+            padding: 12px 30px;
             font-size: 1rem;
-            color: var(--text-secondary);
-            margin-bottom: 25px;
-            line-height: 1.6;
         }
 
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-        }
-
-        .modal-btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .modal-btn-cancel {
-            background: #e5e7eb;
-            color: #374151;
-        }
-
-        .modal-btn-cancel:hover {
-            background: #d1d5db;
-        }
-
-        .modal-btn-confirm {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .modal-btn-confirm:hover {
-            background: var(--primary-dark);
-        }
-
-        .modal-btn-danger {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        .modal-btn-danger:hover {
-            background: #dc2626;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+            
             .navbar-brand {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
-
-            .my-resume-content {
+            
+            .back-btn span {
+                display: none;
+            }
+            
+            .photo-preview {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+            
+            .skill-input-group {
                 flex-direction: column;
-                text-align: center;
             }
-
-            .my-resume-name {
-                font-size: 1.3rem;
+            
+            .skill-input-group .btn {
+                width: 100%;
             }
-
-            .my-resume-actions {
-                justify-content: center;
+            
+            .form-actions {
+                flex-direction: column;
             }
-
-            .my-resume-actions .btn {
-                flex: 1;
-                min-width: 120px;
+            
+            .form-actions .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="container navbar-content">
             <a href="#" class="navbar-brand">
                 <span>📄</span>
                 Resume Builder
             </a>
-            <div class="navbar-user">
-                <div class="user-avatar">JD</div>
-                <button class="btn btn-secondary btn-sm logout-btn" onclick="handleLogout()">Logout</button>
-            </div>
+            <button class="btn btn-secondary back-btn" onclick="handleBack()">
+                ← <span>Back to Dashboard</span>
+            </button>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="container">
-        <!-- My Resume Section -->
-        <div class="my-resume-section">
-            <h2 class="section-title">My Resume</h2>
-            <div class="card my-resume-card">
-                <div class="my-resume-content">
-                    <div class="my-resume-avatar">JD</div>
-                    <div class="my-resume-info">
-                        <div class="my-resume-name">John Doe</div>
-                        <div class="my-resume-status">Full Stack Developer</div>
-                        <div class="my-resume-actions">
-                            <button class="btn btn-sm" onclick="handleDownload('John Doe')">📥 Download</button>
-                            <button class="btn btn-sm" onclick="handleShare('John Doe')">🔗 Share</button>
-                            <button class="btn btn-sm" onclick="showEditModal('John Doe')">✏️ Edit</button>
-                            <button class="btn btn-sm" onclick="handleView('John Doe')">👁️ View</button>
-                            <button class="btn btn-sm" onclick="showDeleteModal('John Doe')">🗑️ Delete</button>
+        <div class="page-header">
+            <h1>Create New Resume</h1>
+            <p>Fill in the details below to create your professional resume</p>
+        </div>
+
+        <div class="card photo-section">
+            <div class="photo-container">
+                <div class="photo-preview" id="photoPreview">
+                    <span id="photoInitials">?</span>
+                    <img id="photoImage" style="display: none;">
+                </div>
+                <label class="photo-upload-btn">
+                    📷 Upload Photo
+                    <input type="file" accept="image/*" onchange="handlePhotoUpload(event)">
+                </label>
+            </div>
+        </div>
+
+        <div class="card form-section">
+            <div class="section-header">
+                <h3>👤 Personal Information</h3>
+            </div>
+            <div class="section-content">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" oninput="updatePhotoInitials()">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" placeholder="Enter your address">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Contact Number</label>
+                        <input type="tel" placeholder="Enter contact number">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="Enter email address">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sectionsContainer">
+            <div class="card form-section" id="objectiveSection" data-section-name="Objective" data-section-icon="🎯">
+                <div class="section-header collapsed" onclick="toggleSection('objectiveContent')">
+                    <h3>🎯 Objective <span class="collapse-icon">▼</span></h3>
+                    <div class="section-actions" onclick="event.stopPropagation()">
+                        <button class="delete-section-btn" onclick="deleteSection('objectiveSection')">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="section-content hidden" id="objectiveContent">
+                    <div class="objective-options">
+                        <div class="objective-option" onclick="selectObjective(0)">
+                            To secure a challenging position where I can utilize my skills and contribute to organizational growth.
+                        </div>
+                        <div class="objective-option" onclick="selectObjective(1)">
+                            Seeking an opportunity to leverage my expertise in a dynamic environment and achieve professional excellence.
+                        </div>
+                        <div class="objective-option" onclick="selectObjective(2)">
+                            To obtain a position that allows me to grow professionally while contributing to the success of the organization.
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label>Custom Objective</label>
+                        <textarea id="objectiveText" placeholder="Or write your own objective..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card form-section" id="educationSection" data-section-name="Educational Qualification" data-section-icon="🎓">
+                <div class="section-header collapsed" onclick="toggleSection('educationContent')">
+                    <h3>🎓 Educational Qualification <span class="collapse-icon">▼</span></h3>
+                    <div class="section-actions" onclick="event.stopPropagation()">
+                        <button class="delete-section-btn" onclick="deleteSection('educationSection')">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="section-content hidden" id="educationContent">
+                    <div id="educationRows">
+                        <div class="dynamic-section">
+                            <button class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                            <div class="form-group">
+                                <label>Degree/Qualification</label>
+                                <input type="text" placeholder="e.g., B.Tech in Computer Science">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Institution</label>
+                                    <input type="text" placeholder="Enter institution name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Year</label>
+                                    <input type="text" placeholder="e.g., 2020-2024">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select>
+                                        <option value="">Select Status</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="pursuing">Pursuing</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Result</label>
+                                    <input type="text" placeholder="e.g., 8.5 CGPA or 85%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="add-more-btn" onclick="addEducationRow()">+ Add More Education</button>
+                </div>
+            </div>
+
+            <div class="card form-section" id="workSection" data-section-name="Work Experience" data-section-icon="💼">
+                <div class="section-header collapsed" onclick="toggleSection('workContent')">
+                    <h3>💼 Work Experience <span class="collapse-icon">▼</span></h3>
+                    <div class="section-actions" onclick="event.stopPropagation()">
+                        <button class="delete-section-btn" onclick="deleteSection('workSection')">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="section-content hidden" id="workContent">
+                    <div id="workRows">
+                        <div class="dynamic-section">
+                            <button class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                            <div class="form-group">
+                                <label>Work Experience</label>
+                                <input type="text" placeholder="e.g., 6 months experience as Executive in ABC Company">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="add-more-btn" onclick="addWorkRow()">+ Add More Experience</button>
+                </div>
+            </div>
+
+            <div class="card form-section" id="skillsSection" data-section-name="Key Skills" data-section-icon="⚡">
+                <div class="section-header collapsed" onclick="toggleSection('skillsContent')">
+                    <h3>⚡ Key Skills <span class="collapse-icon">▼</span></h3>
+                    <div class="section-actions" onclick="event.stopPropagation()">
+                        <button class="delete-section-btn" onclick="deleteSection('skillsSection')">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="section-content hidden" id="skillsContent">
+                    <div class="skill-input-group">
+                        <input type="text" id="skillInput" placeholder="Enter a skill">
+                        <button class="btn btn-primary" onclick="addSkill()">Add Skill</button>
+                    </div>
+                    <div class="skills-container" id="skillsContainer"></div>
+                </div>
+            </div>
+
+            <div class="card form-section" id="competenciesSection" data-section-name="Key Competencies" data-section-icon="🏆">
+                <div class="section-header collapsed" onclick="toggleSection('competenciesContent')">
+                    <h3>🏆 Key Competencies <span class="collapse-icon">▼</span></h3>
+                    <div class="section-actions" onclick="event.stopPropagation()">
+                        <button class="delete-section-btn" onclick="deleteSection('competenciesSection')">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="section-content hidden" id="competenciesContent">
+                    <div class="skill-input-group">
+                        <input type="text" id="competencyInput" placeholder="Enter a competency">
+                        <button class="btn btn-primary" onclick="addCompetency()">Add Competency</button>
+                    </div>
+                    <div class="skills-container" id="competenciesContainer"></div>
+                </div>
+            </div>
+
+            <div class="card form-section" id="personalSection" data-section-name="Personal Details" data-section-icon="📋">
+                <div class="section-header collapsed" onclick="toggleSection('personalContent')">
+                    <h3>📋 Personal Details <span class="collapse-icon">▼</span></h3>
+                    <div class="section-actions" onclick="event.stopPropagation()">
+                        <button class="delete-section-btn" onclick="deleteSection('personalSection')">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="section-content hidden" id="personalContent">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Father's Name</label>
+                            <input type="text" placeholder="Enter father's name">
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Marital Status</label>
+                            <select>
+                                <option value="">Select Status</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nationality</label>
+                            <input type="text" placeholder="Enter nationality">
+                        </div>
+                        <div class="form-group">
+                            <label>Languages Known</label>
+                            <input type="text" placeholder="e.g., English, Hindi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Strength</label>
+                        <textarea placeholder="Describe your strengths..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Hobbies</label>
+                        <input type="text" placeholder="e.g., Reading, Traveling, Music">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card form-section" id="declarationSection" data-section-name="Declaration" data-section-icon="✍️">
+                <div class="section-header collapsed" onclick="toggleSection('declarationContent')">
+                    <h3>✍️ Declaration <span class="collapse-icon">▼</span></h3>
+                    <div class="section-actions" onclick="event.stopPropagation()">
+                        <button class="delete-section-btn" onclick="deleteSection('declarationSection')">🗑️ Delete</button>
+                    </div>
+                </div>
+                <div class="section-content hidden" id="declarationContent">
+                    <div class="form-group">
+                        <label>Declaration Text</label>
+                        <textarea id="declarationText">I hereby declare that the information provided above is true and correct to the best of my knowledge and belief.</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" placeholder="Enter city name">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Others Section -->
-        <div class="others-section">
-            <h2 class="section-title">Others</h2>
-            <div class="grid grid-cols-4">
-                <!-- Resume Card 1 -->
-                <div class="card resume-card">
-                    <div class="resume-avatar">SM</div>
-                    <div class="resume-name">Sarah Miller</div>
-                    <div class="resume-status">Marketing Manager</div>
-                    <div class="resume-actions">
-                        <button class="btn btn-primary btn-sm" onclick="showSetMyResumeModal('Sarah Miller')">✓ Set as My Resume</button>
-                    </div>
-                    <div class="icon-actions">
-                        <button class="icon-btn icon-btn-share" onclick="handleShare('Sarah Miller')" title="Share">🔗</button>
-                        <button class="icon-btn icon-btn-edit" onclick="showEditModal('Sarah Miller')" title="Edit">✏️</button>
-                        <button class="icon-btn icon-btn-view" onclick="handleView('Sarah Miller')" title="View">👁️</button>
-                        <button class="icon-btn icon-btn-delete" onclick="showDeleteModal('Sarah Miller')" title="Delete">🗑️</button>
-                    </div>
-                </div>
-
-                <!-- Resume Card 2 -->
-                <div class="card resume-card">
-                    <div class="resume-avatar" style="background: #f59e0b;">MC</div>
-                    <div class="resume-name">Mike Chen</div>
-                    <div class="resume-status">Student</div>
-                    <div class="resume-actions">
-                        <button class="btn btn-primary btn-sm" onclick="showSetMyResumeModal('Mike Chen')">✓ Set as My Resume</button>
-                    </div>
-                    <div class="icon-actions">
-                        <button class="icon-btn icon-btn-share" onclick="handleShare('Mike Chen')" title="Share">🔗</button>
-                        <button class="icon-btn icon-btn-edit" onclick="showEditModal('Mike Chen')" title="Edit">✏️</button>
-                        <button class="icon-btn icon-btn-view" onclick="handleView('Mike Chen')" title="View">👁️</button>
-                        <button class="icon-btn icon-btn-delete" onclick="showDeleteModal('Mike Chen')" title="Delete">🗑️</button>
-                    </div>
-                </div>
-
-                <!-- Resume Card 3 -->
-                <div class="card resume-card">
-                    <div class="resume-avatar" style="background: #ef4444;">AP</div>
-                    <div class="resume-name">Anna Patel</div>
-                    <div class="resume-status">Data Scientist</div>
-                    <div class="resume-actions">
-                        <button class="btn btn-primary btn-sm" onclick="showSetMyResumeModal('Anna Patel')">✓ Set as My Resume</button>
-                    </div>
-                    <div class="icon-actions">
-                        <button class="icon-btn icon-btn-share" onclick="handleShare('Anna Patel')" title="Share">🔗</button>
-                        <button class="icon-btn icon-btn-edit" onclick="showEditModal('Anna Patel')" title="Edit">✏️</button>
-                        <button class="icon-btn icon-btn-view" onclick="handleView('Anna Patel')" title="View">👁️</button>
-                        <button class="icon-btn icon-btn-delete" onclick="showDeleteModal('Anna Patel')" title="Delete">🗑️</button>
-                    </div>
-                </div>
-
-                <!-- Resume Card 4 -->
-                <div class="card resume-card">
-                    <div class="resume-avatar" style="background: #8b5cf6;">RJ</div>
-                    <div class="resume-name">Robert Johnson</div>
-                    <div class="resume-status">Working Professional</div>
-                    <div class="resume-actions">
-                        <button class="btn btn-primary btn-sm" onclick="showSetMyResumeModal('Robert Johnson')">✓ Set as My Resume</button>
-                    </div>
-                    <div class="icon-actions">
-                        <button class="icon-btn icon-btn-share" onclick="handleShare('Robert Johnson')" title="Share">🔗</button>
-                        <button class="icon-btn icon-btn-edit" onclick="showEditModal('Robert Johnson')" title="Edit">✏️</button>
-                        <button class="icon-btn icon-btn-view" onclick="handleView('Robert Johnson')" title="View">👁️</button>
-                        <button class="icon-btn icon-btn-delete" onclick="showDeleteModal('Robert Johnson')" title="Delete">🗑️</button>
-                    </div>
-                </div>
-
-                <!-- Resume Card 5 -->
-                <div class="card resume-card">
-                    <div class="resume-avatar" style="background: #10b981;">LW</div>
-                    <div class="resume-name">Lisa Wang</div>
-                    <div class="resume-status">UX Designer</div>
-                    <div class="resume-actions">
-                        <button class="btn btn-primary btn-sm" onclick="showSetMyResumeModal('Lisa Wang')">✓ Set as My Resume</button>
-                    </div>
-                    <div class="icon-actions">
-                        <button class="icon-btn icon-btn-share" onclick="handleShare('Lisa Wang')" title="Share">🔗</button>
-                        <button class="icon-btn icon-btn-edit" onclick="showEditModal('Lisa Wang')" title="Edit">✏️</button>
-                        <button class="icon-btn icon-btn-view" onclick="handleView('Lisa Wang')" title="View">👁️</button>
-                        <button class="icon-btn icon-btn-delete" onclick="showDeleteModal('Lisa Wang')" title="Delete">🗑️</button>
-                    </div>
-                </div>
-
-                <!-- Resume Card 6 -->
-                <div class="card resume-card">
-                    <div class="resume-avatar" style="background: #06b6d4;">DK</div>
-                    <div class="resume-name">David Kim</div>
-                    <div class="resume-status">Student</div>
-                    <div class="resume-actions">
-                        <button class="btn btn-primary btn-sm" onclick="showSetMyResumeModal('David Kim')">✓ Set as My Resume</button>
-                    </div>
-                    <div class="icon-actions">
-                        <button class="icon-btn icon-btn-share" onclick="handleShare('David Kim')" title="Share">🔗</button>
-                        <button class="icon-btn icon-btn-edit" onclick="showEditModal('David Kim')" title="Edit">✏️</button>
-                        <button class="icon-btn icon-btn-view" onclick="handleView('David Kim')" title="View">👁️</button>
-                        <button class="icon-btn icon-btn-delete" onclick="showDeleteModal('David Kim')" title="Delete">🗑️</button>
-                    </div>
-                </div>
-
-                <!-- Create New Card -->
-                <div class="card create-card" onclick="handleCreateNew()">
-                    <div class="create-icon">➕</div>
-                    <div class="create-text">Create New Resume</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Set My Resume Modal -->
-    <div id="setMyResumeModal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 class="modal-title">Set as My Resume</h3>
-            <p class="modal-message" id="setMyResumeMessage"></p>
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-cancel" onclick="closeSetMyResumeModal()">Cancel</button>
-                <button class="modal-btn modal-btn-confirm" onclick="confirmSetMyResume()">Confirm</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 class="modal-title">Edit Resume</h3>
-            <p class="modal-message" id="editMessage"></p>
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-cancel" onclick="closeEditModal()">Cancel</button>
-                <button class="modal-btn modal-btn-confirm" onclick="confirmEdit()">Continue to Edit</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Modal -->
-    <div id="deleteModal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 class="modal-title">Delete Resume</h3>
-            <p class="modal-message" id="deleteMessage"></p>
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
-                <button class="modal-btn modal-btn-danger" onclick="confirmDelete()">Delete</button>
-            </div>
+        <div class="form-actions">
+            <button class="btn btn-secondary" onclick="handleCancel()">Cancel</button>
+            <button class="btn btn-primary" onclick="handlePreview()">👁️ Preview Resume</button>
+            <button class="btn btn-primary" onclick="handleSave()">💾 Save Resume</button>
         </div>
     </div>
 
     <script>
-        let currentResumeName = '';
+        const deletedSections = {};
 
-        // Set My Resume Modal Functions
-        function showSetMyResumeModal(name) {
-            currentResumeName = name;
-            document.getElementById('setMyResumeMessage').textContent = 
-                `Are you sure you want to set "${name}'s" resume as your active resume? Your current resume will be moved to the Others section.`;
-            document.getElementById('setMyResumeModal').classList.add('show');
-        }
-
-        function closeSetMyResumeModal() {
-            document.getElementById('setMyResumeModal').classList.remove('show');
-            currentResumeName = '';
-        }
-
-        function confirmSetMyResume() {
-            alert(`"${currentResumeName}'s" resume is now set as your active resume!`);
-            closeSetMyResumeModal();
-            // In real app: Update the "My Resume" section with selected resume
-        }
-
-        // Edit Modal Functions
-        function showEditModal(name) {
-            currentResumeName = name;
-            document.getElementById('editMessage').textContent = 
-                `You are about to edit "${name}'s" resume. Any unsaved changes will be lost. Do you want to continue?`;
-            document.getElementById('editModal').classList.add('show');
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('show');
-            currentResumeName = '';
-        }
-
-        function confirmEdit() {
-            alert(`Redirecting to edit page for "${currentResumeName}"...`);
-            closeEditModal();
-            // In real app: Redirect to edit page
-        }
-
-        // Delete Modal Functions
-        function showDeleteModal(name) {
-            currentResumeName = name;
-            document.getElementById('deleteMessage').textContent = 
-                `Are you sure you want to delete "${name}'s" resume? This action cannot be undone.`;
-            document.getElementById('deleteModal').classList.add('show');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('show');
-            currentResumeName = '';
-        }
-
-        function confirmDelete() {
-            alert(`"${currentResumeName}'s" resume has been deleted.`);
-            closeDeleteModal();
-            // In real app: Delete the resume from database
-        }
-
-        // Close modals when clicking outside
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal-overlay')) {
-                event.target.classList.remove('show');
-                currentResumeName = '';
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('photoImage').src = e.target.result;
+                    document.getElementById('photoImage').style.display = 'block';
+                    document.getElementById('photoInitials').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        // Other Action Handlers
-        function handleDownload(name) {
-            alert(`Downloading resume of ${name}\n\nIn a real app, this would generate and download a PDF file.`);
-        }
-
-        // WORKING SHARE FUNCTION - Same as resume page
-        function handleShare(name) {
-            const url = window.location.href;
-            const text = `Check out ${name}'s professional resume!`;
+        function updatePhotoInitials() {
+            const name = document.getElementById('fullName').value.trim();
+            const initialsElement = document.getElementById('photoInitials');
+            const imageElement = document.getElementById('photoImage');
             
-            // Try native share API first (works on mobile and modern browsers)
-            if (navigator.share) {
-                navigator.share({
-                    title: `${name} - Professional Resume`,
-                    text: text,
-                    url: url
-                })
-                .then(() => console.log('Shared successfully'))
-                .catch((error) => {
-                    // If user cancels, don't show error
-                    if (error.name !== 'AbortError') {
-                        console.log('Share error:', error);
-                    }
-                });
-            } else {
-                // Fallback: Copy to clipboard
-                const tempInput = document.createElement('input');
-                tempInput.value = url;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                
-                alert(`🔗 Resume link for ${name} copied to clipboard!\n\n${url}\n\nYou can now share it anywhere!`);
+            if (imageElement.style.display === 'none') {
+                if (name) {
+                    const parts = name.split(' ');
+                    const initials = parts.length > 1 
+                        ? parts[0][0] + parts[parts.length - 1][0]
+                        : parts[0][0];
+                    initialsElement.textContent = initials.toUpperCase();
+                } else {
+                    initialsElement.textContent = '?';
+                }
             }
         }
+
+        function toggleSection(contentId) {
+            const content = document.getElementById(contentId);
+            const header = content.previousElementSibling;
+            content.classList.toggle('hidden');
+            header.classList.toggle('collapsed');
+        }
+
+        function deleteSection(sectionId) {
+            if (confirm('Are you sure you want to delete this section?')) {
+                const section = document.getElementById(sectionId);
+                const sectionName = section.dataset.sectionName;
+                const sectionIcon = section.dataset.sectionIcon;
+                
+                deletedSections[sectionId] = section.outerHTML;
+                section.classList.add('deleting');
+                
+                setTimeout(() => {
+                    section.classList.remove('deleting');
+                    section.classList.add('section-hidden');
+                    
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'add-section-placeholder';
+                    placeholder.id = `placeholder-${sectionId}`;
+                    placeholder.innerHTML = `
+                        <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.95rem;">
+                            Section "${sectionName}" has been removed
+                        </p>
+                        <button class="restore-section-btn" onclick="restoreSection('${sectionId}')">
+                            ${sectionIcon} Add ${sectionName} Section
+                        </button>
+                    `;
+                    
+                    section.parentNode.insertBefore(placeholder, section.nextSibling);
+                }, 400);
+            }
+        }
+
+        function restoreSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const placeholder = document.getElementById(`placeholder-${sectionId}`);
+            
+            if (placeholder) {
+                placeholder.style.animation = 'slideOut 0.4s ease forwards';
+                
+                setTimeout(() => {
+                    placeholder.remove();
+                    section.classList.remove('section-hidden');
+                    section.style.animation = 'slideIn 0.4s ease forwards';
+                    
+                    setTimeout(() => {
+                        section.style.animation = '';
+                    }, 400);
+                }, 400);
+            }
+        }
+
+        let selectedObjectiveIndex = -1;
+        function selectObjective(index) {
+            const options = document.querySelectorAll('.objective-option');
+            options.forEach((opt, i) => {
+                opt.classList.toggle('selected', i === index);
+            });
+            selectedObjectiveIndex = index;
+            document.getElementById('objectiveText').value = options[index].textContent.trim();
+        }
+
+        function addEducationRow() {
+            const container = document.getElementById('educationRows');
+            const newRow = document.createElement('div');
+            newRow.className = 'dynamic-section';
+            newRow.innerHTML = `
+                <button class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                <div class="form-group">
+                    <label>Degree/Qualification</label>
+                    <input type="text" placeholder="e.g., B.Tech in Computer Science">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Institution</label>
+                        <input type="text" placeholder="Enter institution name">
+                    </div>
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="text" placeholder="e.g., 2020-2024">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select>
+                            <option value="">Select Status</option>
+                            <option value="completed">Completed</option>
+                            <option value="pursuing">Pursuing</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Result</label>
+                        <input type="text" placeholder="e.g., 8.5 CGPA or 85%">
+                    </div>
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function addWorkRow() {
+            const container = document.getElementById('workRows');
+            const newRow = document.createElement('div');
+            newRow.className = 'dynamic-section';
+            newRow.innerHTML = `
+                <button class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                <div class="form-group">
+                    <label>Work Experience</label>
+                    <input type="text" placeholder="e.g., 6 months experience as Executive in ABC Company">
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function removeRow(button) {
+            const row = button.parentElement;
+            const container = row.parentElement;
+            if (container.children.length > 1) {
+                row.remove();
+            } else {
+                alert('At least one entry is required!');
+            }
+        }
+
+        function addSkill() {
+            const input = document.getElementById('skillInput');
+            const skill = input.value.trim();
+            if (skill) {
+                const container = document.getElementById('skillsContainer');
+                const tag = document.createElement('div');
+                tag.className = 'skill-tag';
+                tag.innerHTML = `${skill} <span class="remove-skill" onclick="removeTag(this)">✕</span>`;
+                container.appendChild(tag);
+                input.value = '';
+            }
+        }
+
+        function addCompetency() {
+            const input = document.getElementById('competencyInput');
+            const competency = input.value.trim();
+            if (competency) {
+                const container = document.getElementById('competenciesContainer');
+                const tag = document.createElement('div');
+                tag.className = 'skill-tag';
+                tag.innerHTML = `${competency} <span class="remove-skill" onclick="removeTag(this)">✕</span>`;
+                container.appendChild(tag);
+                input.value = '';
+            }
+        }
+
+        function removeTag(span) {
+            span.parentElement.remove();
+        }
+
+        document.getElementById('skillInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addSkill();
+            }
+        });
+
+        document.getElementById('competencyInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addCompetency();
+            }
+        });
+
+        function handleSave() {
+            const name = document.getElementById('fullName').value.trim();
+            if (!name) {
+                alert('Please enter your full name before saving!');
+                return;
+            }
+            alert(`✅ Resume saved successfully for ${name}!\n\nIn a real application, this would save the data to a database.`);
+        }
+
+        function handlePreview() {
+            const name = document.getElementById('fullName').value.trim();
+            if (!name) {
+                alert('Please enter your full name before previewing!');
+                return;
+            }
+            alert(`👁️ Opening preview for ${name}'s resume...\n\nIn a real application, this would open a preview page showing how the resume looks.`);
+        }
+
+        function handleCancel() {
+            if (confirm('Are you sure you want to cancel? All unsaved changes will be lost.')) {
+                alert('Redirecting to Dashboard...');
+            }
+        }
+
+        function handleBack() {
+            if (confirm('Are you sure you want to go back? Any unsaved changes will be lost.')) {
+                alert('Redirecting to Dashboard...');
+            }
+        }
+    </script>
+</body>
+</html>
