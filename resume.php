@@ -43,12 +43,6 @@ try {
     $stmt->execute();
     $experience = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-    // print_r($resume);
-    // print_r($education);
-    // print_r($skill);
-    // print_r($competency);
-    // print_r($experience);
-
 } catch (Exception $e) {
     die("Error: " . $e->getMessage());
 }

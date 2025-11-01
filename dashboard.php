@@ -151,7 +151,7 @@ $other_resumes = mysqli_fetch_all($result2, MYSQLI_ASSOC);
             <p class="modal-message" id="editMessage"></p>
             <div class="modal-actions">
                 <button class="modal-btn modal-btn-cancel" onclick="closeEditModal()">Cancel</button>
-                <button class="modal-btn modal-btn-confirm" onclick="confirmEdit()">Continue to Edit</button>
+                <button class="modal-btn modal-btn-confirm" id="editConfirmBtn" onclick="confirmEdit()">Continue to Edit</button>
             </div>
         </div>
     </div>
@@ -197,6 +197,10 @@ $other_resumes = mysqli_fetch_all($result2, MYSQLI_ASSOC);
             document.getElementById('editMessage').textContent = 
                 `You are about to edit "${name}'s" resume. Any unsaved changes will be lost. Do you want to continue?`;
             document.getElementById('editModal').classList.add('show');
+            const btnEditConfirm = document.getElementById('editConfirmBtn');
+            btnEditConfirm.onclick = function() {
+                window.location.href = `build.php?req=edit&id=${id}`;
+            }
         }
 
         function closeEditModal() {

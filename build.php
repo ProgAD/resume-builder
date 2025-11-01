@@ -4,6 +4,74 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
     header("Location: actions/auth/logout.php");
     exit();
 }
+if(!isset($_GET['req'])){
+    header("Location: dashobard.html");
+    exit();
+}
+
+$req = $_GET['req'];
+
+if($req == 'edit'){
+    if(!isset($_GET['id'])){
+        header("Location: dashobard.html");
+        exit();
+    }
+    $resume_id = $_GET['id'];
+
+    require 'config/db.php';
+
+    try {
+        // -------------------- FETCH MAIN RESUME --------------------
+        $stmt = $conn->prepare("SELECT * FROM resumes WHERE id = ?");
+        $stmt->bind_param("i", $resume_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $resume = $result->fetch_assoc();
+
+        // -------------------- FETCH EDUCATION --------------------
+        $stmt = $conn->prepare("SELECT * FROM education WHERE resume_id = ?");
+        $stmt->bind_param("i", $resume_id);
+        $stmt->execute();
+        $education = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        // -------------------- FETCH SKILLS --------------------
+        $stmt = $conn->prepare("SELECT * FROM skills WHERE resume_id = ?");
+        $stmt->bind_param("i", $resume_id);
+        $stmt->execute();
+        $skills = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        // -------------------- FETCH COMPETENCIES --------------------
+        $stmt = $conn->prepare("SELECT * FROM competencies WHERE resume_id = ?");
+        $stmt->bind_param("i", $resume_id);
+        $stmt->execute();
+        $competencies = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        // -------------------- FETCH EXPERIENCE --------------------
+        $stmt = $conn->prepare("SELECT * FROM work_experience WHERE resume_id = ?");
+        $stmt->bind_param("i", $resume_id);
+        $stmt->execute();
+        $experience = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        $full_name = $resume['full_name']?? '';
+        $photo_path = $resume['profile_photo']?? '';
+        $phone = $resume['phone']?? '';
+        $email = $resume['email']?? '';
+        $address = $resume['address']?? '';
+        $objective = $resume['objective']?? '';
+        $father_name = $resume['father_name']?? '';
+        $dob = $resume['date_of_birth']?? '';
+        $gender = $resume['gender']?? '';
+        $marital_status = $resume['marital_status']?? '';
+        $nationality = $resume['nationality']?? '';
+        $languages_known = $resume['languages_known']?? '';
+        $strengths = $resume['strengths']?? '';
+        $hobbies = $resume['hobbies']?? '';
+        $declaration_text = $resume['declaration_text']?? '';
+        $declaration_city = $resume['declaration_city']?? '';
+    } catch (Exception $e) {
+        die("Error: " . $e->getMessage());
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,558 +79,7 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Resume - Resume Builder</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f7fa;
-            min-height: 100vh;
-            padding-bottom: 40px;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 600;
-            line-height: 1.3;
-            color: #1f2937;
-        }
-
-        :root {
-            --primary-color: #0D9488;
-            --primary-dark: #0a7a70;
-            --secondary-color: #64748b;
-            --danger-color: #ef4444;
-            --bg-light: #f5f7fa;
-            --border-color: #e5e7eb;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--secondary-color);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #475569;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 15px 0;
-            margin-bottom: 30px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navbar-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar-brand {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-btn {
-            padding: 8px 16px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Page Header */
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .page-header p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-
-        /* Photo Upload */
-        .photo-section {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .photo-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .photo-preview {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: 700;
-            overflow: hidden;
-            border: 4px solid #e5e7eb;
-        }
-
-        .photo-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .photo-upload-btn {
-            display: inline-block;
-            padding: 8px 20px;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .photo-upload-btn:hover {
-            background: var(--primary-dark);
-        }
-
-        .photo-upload-btn input[type="file"] {
-            display: none;
-        }
-
-        /* Form Sections */
-        .form-section {
-            margin-bottom: 15px;
-            transition: all 0.4s ease;
-        }
-
-        .form-section.deleting {
-            animation: slideOut 0.4s ease forwards;
-        }
-
-        @keyframes slideOut {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                max-height: 2000px;
-            }
-            50% {
-                opacity: 0.5;
-                transform: translateY(-10px) scale(0.95);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-20px) scale(0.9);
-                max-height: 0;
-                margin-bottom: 0;
-                padding: 0;
-            }
-        }
-
-        .form-section.section-hidden {
-            display: none;
-        }
-
-        .add-section-placeholder {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 2px dashed var(--border-color);
-            margin-bottom: 20px;
-            text-align: center;
-            animation: slideIn 0.4s ease forwards;
-            opacity: 0;
-        }
-
-        @keyframes slideIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px) scale(0.9);
-            }
-            50% {
-                opacity: 0.5;
-                transform: translateY(-10px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .restore-section-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .restore-section-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            user-select: none;
-            transition: all 0.3s ease;
-        }
-
-        .section-header:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
-        }
-
-        .section-header h3 {
-            color: white;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .delete-section-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .delete-section-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .collapse-icon {
-            transition: transform 0.3s ease;
-        }
-
-        .section-header.collapsed .collapse-icon {
-            transform: rotate(-180deg);
-        }
-
-        .section-content {
-            padding: 20px;
-            background: white;
-            border: 1px solid var(--border-color);
-            border-top: none;
-            border-radius: 0 0 8px 8px;
-            max-height: 2000px;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease, opacity 0.3s ease;
-            opacity: 1;
-        }
-
-        .section-content.hidden {
-            max-height: 0;
-            padding: 0 20px;
-            opacity: 0;
-            border: none;
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        /* Dynamic Rows */
-        .dynamic-section {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            padding-top: 40px;
-            margin-bottom: 15px;
-            position: relative;
-            background: #fafafa;
-        }
-
-        .remove-row-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--danger-color);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .remove-row-btn:hover {
-            background: #dc2626;
-        }
-
-        .add-more-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .add-more-btn:hover {
-            background: var(--primary-dark);
-        }
-
-        /* Skills & Tags */
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .skill-tag {
-            background: var(--primary-color);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .remove-skill {
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .skill-input-group {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .skill-input-group input {
-            flex: 1;
-        }
-
-        /* Objective Options */
-        .objective-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .objective-option {
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .objective-option:hover {
-            border-color: var(--primary-color);
-            background: rgba(13, 148, 136, 0.05);
-        }
-
-        .objective-option.selected {
-            border-color: var(--primary-color);
-            background: rgba(13, 148, 136, 0.1);
-            font-weight: 600;
-        }
-
-        /* Form Actions */
-        .form-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border-color);
-        }
-
-        .form-actions .btn {
-            padding: 12px 30px;
-            font-size: 1rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .page-header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .navbar-brand {
-                font-size: 1.1rem;
-            }
-            
-            .back-btn span {
-                display: none;
-            }
-            
-            .photo-preview {
-                width: 100px;
-                height: 100px;
-                font-size: 2.5rem;
-            }
-            
-            .skill-input-group {
-                flex-direction: column;
-            }
-            
-            .skill-input-group .btn {
-                width: 100%;
-            }
-            
-            .form-actions {
-                flex-direction: column;
-            }
-            
-            .form-actions .btn {
-                width: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/build.css">
 </head>
 <body>
     <nav class="navbar">
@@ -578,7 +95,7 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
     </nav>
 
     <div class="container">
-        <form id="resumeForm" method="POST" action="actions/resume/save_resume.php" enctype="multipart/form-data">
+        <form id="resumeForm" method="POST" action="<?php echo $req == 'new' ? 'actions/resume/save_resume.php' : 'actions/resume/update_resume.php'; ?>" enctype="multipart/form-data">
         <div class="page-header">
             <h1>Create New Resume</h1>
             <p>Fill in the details below to create your professional resume</p>
@@ -587,8 +104,8 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
         <div class="card photo-section">
             <div class="photo-container">
                 <div class="photo-preview" id="photoPreview">
-                    <span id="photoInitials">?</span>
-                    <img id="photoImage" style="display: none;">
+                    <?php if($photo_path == ""){ echo '<span id="photoInitials">?</span>'; } ?>
+                    <img id="photoImage" src="<?php echo htmlspecialchars($photo_path); ?>" <?php if($req == 'new'){ echo 'style="display: none;"'; } ?> >
                 </div>
                 <label class="photo-upload-btn">
                     📷 Upload Photo
@@ -604,20 +121,20 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
             <div class="section-content">
                 <div class="form-group">
                     <label for="fullName">Full Name *</label>
-                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" oninput="updatePhotoInitials()" required>
+                    <input type="text" id="fullName" name="fullName" value="<?php echo htmlspecialchars($full_name); ?>" placeholder="Enter your full name" oninput="updatePhotoInitials()" required>
                 </div>
                 <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" id="address" name="address" placeholder="Enter your address" required>
+                    <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($address); ?>" placeholder="Enter your address" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="phone">Contact Number</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Enter contact number" required>
+                        <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($phone); ?>" placeholder="Enter contact number" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Enter email address" required>
+                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="Enter email address" required>
                     </div>
                 </div>
             </div>
@@ -650,7 +167,7 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                         name="objective" 
                         placeholder="Or write your own objective..." 
                         required
-                        >I am a motivated and quick learner seeking an entry-level position in a dynamic organization where I can apply my academic knowledge and develop new skills. My goal is to contribute effectively to the company's success while gaining practical experience and growing professionally. I am eager to work collaboratively with a team that values innovation, creativity, and dedication.
+                        ><?php if (!empty($objective)): ?><?php echo htmlspecialchars($objective); ?><?php else: ?>I am a motivated and quick learner seeking an entry-level position in a dynamic organization where I can apply my academic knowledge and develop new skills. My goal is to contribute effectively to the company's success while gaining practical experience and growing professionally. I am eager to work collaboratively with a team that values innovation, creativity, and dedication.<?php endif; ?>
                     </textarea>
 
                     </div>
@@ -666,6 +183,7 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 </div>
                 <div class="section-content hidden" id="educationContent">
                     <div id="educationRows">
+                        <?php if ($req == 'new'): ?>
                         <div class="dynamic-section">
                             <button type="button" class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
                             <div class="form-group">
@@ -697,6 +215,41 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                                 </div>
                             </div>
                         </div>
+                        <?php elseif ($req == 'edit'): ?>
+                            <?php foreach ($education as $index => $edu): ?>
+                                <div class="dynamic-section">
+                                    <button type="button" class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                                    <div class="form-group">
+                                        <label>Degree/Qualification</label>
+                                        <input type="text" name="educationQualification[]" value="<?php echo htmlspecialchars($edu['qualification']); ?>" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Institution</label>
+                                            <input type="text" name="educationInstitution[]" value="<?php echo htmlspecialchars($edu['institution']); ?>" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Year</label>
+                                            <input type="text" name="educationYear[]" value="<?php echo htmlspecialchars($edu['year']); ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <select name="educationStatus[]" required onchange="educationStatusChange(this);">
+                                                <option value="" selected>Select Status</option>
+                                                <option value="completed" <?php echo $edu['status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
+                                                <option value="pursuing" <?php echo $edu['status'] == 'pursuing' ? 'selected' : ''; ?>>Pursuing</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="educationResultB" style="display: <?php echo $edu['status'] == 'completed' ? 'block' : 'none'; ?>;">
+                                            <label>Result</label>
+                                            <input type="text" name="educationResult[]" value="<?php echo htmlspecialchars($edu['result']); ?>" placeholder="e.g., 8.5 CGPA or 85%">
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                     <button type="button" class="add-more-btn" onclick="addEducationRow()">+ Add More Education</button>
                 </div>
@@ -709,6 +262,7 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                         <button type="button" class="delete-section-btn" onclick="deleteSection('workSection')">🗑️ Delete</button>
                     </div>
                 </div>
+                <?php if ($req == 'new'): ?>
                 <div class="section-content hidden" id="workContent">
                     <div id="workRows">
                         <div class="dynamic-section">
@@ -721,6 +275,22 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                     </div>
                     <button type="button" class="add-more-btn" onclick="addWorkRow()">+ Add More Experience</button>
                 </div>
+                <?php elseif ($req == 'edit'): ?>
+                <div class="section-content hidden" id="workContent">
+                    <div id="workRows">
+                        <?php foreach ($experience as  $work): ?>
+                        <div class="dynamic-section">
+                            <button type="button" class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                            <div class="form-group">
+                                <!-- <label>Work Experience</label> -->
+                                <input type="text" name="workExperience[]" value="<?php echo htmlspecialchars($work['description']); ?>" placeholder="e.g., 6 months experience as Executive in ABC Company">
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button type="button" class="add-more-btn" onclick="addWorkRow()">+ Add More Experience</button>
+                </div>
+                <?php endif; ?>
             </div>
 
             <div class="card form-section" id="skillsSection" data-section-name="Key Skills" data-section-icon="⚡">
@@ -735,8 +305,19 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                         <input type="text" id="skillInput" placeholder="Enter a skill">
                         <button type="button" class="btn btn-primary" onclick="addSkill()">Add Skill</button>
                     </div>
-                    <div class="skills-container" id="skillsContainer"></div>
-                    <div id="skillsForm" style="display: none !important;"></div>
+                    <div class="skills-container" id="skillsContainer">
+                        <?php if ($req == 'edit'): ?>
+                            <?php foreach ($skills as $skill): ?>
+                                <div class="skill-tag">
+                                    <?php echo htmlspecialchars($skill['skill_name']); ?>
+                                    <span class="remove-skill" onclick="removeTag(this)">
+                                        <input type="hidden" name="keySkill[]" value="<?php echo htmlspecialchars($skill['skill_name']); ?>">
+                                        x
+                                    <span>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
             
@@ -752,8 +333,19 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                         <input type="text" id="competencyInput" placeholder="Enter a competency">
                         <button type="button" class="btn btn-primary" onclick="addCompetency()">Add Competency</button>
                     </div>
-                    <div class="skills-container" id="competenciesContainer"></div>
-                    <div id="competenciesForm" style="display: none !important;"></div>
+                    <div class="skills-container" id="competenciesContainer">
+                        <?php if ($req == 'edit'): ?>
+                            <?php foreach ($competencies as $competency): ?>
+                                <div class="skill-tag">
+                                    <?php echo htmlspecialchars($competency['competency_name']); ?>
+                                    <span class="remove-skill" onclick="removeTag(this)">
+                                        <input type="hidden" name="keyCompetency[]" value="<?php echo htmlspecialchars($competency['competency_name']); ?>">
+                                        x
+                                    <span>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
 
@@ -768,11 +360,11 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                     <div class="form-row">
                         <div class="form-group">
                             <label>Father's Name</label>
-                            <input type="text" name="fatherName" placeholder="Enter father's name">
+                            <input type="text" name="fatherName" value="<?php echo htmlspecialchars($resume['father_name']); ?>" placeholder="Enter father's name">
                         </div>
                         <div class="form-group">
                             <label>Date of Birth</label>
-                            <input type="date" name="dateOfBirth">
+                            <input type="date" value="<?php echo htmlspecialchars($resume['date_of_birth']); ?>" name="dateOfBirth">
                         </div>
                     </div>
                     <div class="form-row">
@@ -780,37 +372,38 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                             <label>Gender</label>
                             <select name="gender">
                                 <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option <?php echo $resume['gender'] == 'male' ? 'selected' : ''; ?> value="male">Male</option>
+                                <option <?php echo $resume['gender'] == 'female' ? 'selected' : ''; ?> value="female">Female</option>
+                                <option <?php echo $resume['gender'] == 'other' ? 'selected' : ''; ?> value="other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Marital Status</label>
                             <select name="maritalStatus">
                                 <option value="">Select Status</option>
-                                <option value="single">Single</option>
-                                <option value="married">Married</option>
+                                <option <?php echo $resume['marital_status'] == 'single' ? 'selected' : ''; ?> value="single">Single</option>
+                                <option <?php echo $resume['marital_status'] == 'married' ? 'selected' : ''; ?> value="married">Married</option>
+                                <option <?php echo $resume['marital_status'] == 'other' ? 'selected' : ''; ?> value="other">Other</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Nationality</label>
-                            <input type="text" name="nationality" placeholder="Enter nationality">
+                            <input type="text" name="nationality" value="<?php echo htmlspecialchars($resume['nationality']); ?>" placeholder="Enter nationality">
                         </div>
                         <div class="form-group">
                             <label>Languages Known</label>
-                            <input type="text" name="languagesKnown" placeholder="e.g., English, Hindi">
+                            <input type="text" name="languagesKnown" value="<?php echo htmlspecialchars($resume['languages_known']); ?>" placeholder="e.g., English, Hindi">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Strength</label>
-                        <textarea name="strengths" placeholder="Describe your strengths..."></textarea>
+                        <textarea name="strengths" value="<?php echo htmlspecialchars($resume['strengths']); ?>" placeholder="Describe your strengths..."></textarea>
                     </div>
                     <div class="form-group">
                         <label>Hobbies</label>
-                        <input type="text" name="hobbies" placeholder="e.g., Reading, Traveling, Music">
+                        <input type="text" name="hobbies" value="<?php echo htmlspecialchars($resume['hobbies']); ?>" placeholder="e.g., Reading, Traveling, Music">
                     </div>
                 </div>
             </div>
@@ -825,11 +418,11 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 <div class="section-content hidden" id="declarationContent">
                     <div class="form-group">
                         <label>Declaration Text</label>
-                        <textarea name="declarationText" id="declarationText">I hereby declare that the information provided above is true and correct to the best of my knowledge and belief.</textarea>
+                        <textarea name="declarationText" id="declarationText"><?php echo htmlspecialchars($resume['declaration_text'] ?? 'I hereby declare that the information provided above is true and correct to the best of my knowledge and belief.'); ?></textarea>
                     </div>
                     <div class="form-group">
                         <label>City</label>
-                        <input type="text" name="city" placeholder="Enter city name" required>
+                        <input type="text" name="city" value="<?php echo htmlspecialchars($resume['declaration_city']); ?>" placeholder="Enter city name" required>
                     </div>
                 </div>
             </div>
@@ -1059,16 +652,17 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 const container = document.getElementById('skillsContainer');
                 const tag = document.createElement('div');
                 tag.className = 'skill-tag';
-                tag.innerHTML = `${skill} <span class="remove-skill" onclick="removeTag(this)">✕</span>`;
+                tag.innerHTML = `${skill} <span class="remove-skill" onclick="removeTag(this)"><input type="hidden" name="keySkill[]" value="${skill}">✕</span>`;
                 container.appendChild(tag);
                 input.value = '';
 
-                const newSkill = document.createElement('input');
-                newSkill.type = 'hidden';
-                newSkill.name = 'keySkill[]';
-                newSkill.value = skill;
-                newSkill.style.display = 'none';
-                document.getElementById('skillsForm').appendChild(newSkill);
+
+                // const newSkill = document.createElement('input');
+                // newSkill.type = 'hidden';
+                // newSkill.name = 'keySkill[]';
+                // newSkill.value = skill;
+                // newSkill.style.display = 'none';
+                // document.getElementById('skillsForm').appendChild(newSkill);
             }
         }
 
@@ -1079,16 +673,16 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 const container = document.getElementById('competenciesContainer');
                 const tag = document.createElement('div');
                 tag.className = 'skill-tag';
-                tag.innerHTML = `${competency} <span class="remove-skill" onclick="removeTag(this)">✕</span>`;
+                tag.innerHTML = `${competency} <span class="remove-skill" onclick="removeTag(this)"><input type="hidden" name="keyCompetency[]" value="${competency}">✕</span>`;
                 container.appendChild(tag);
                 input.value = '';
 
-                const newCompetency = document.createElement('input');
-                newCompetency.type = 'hidden';
-                newCompetency.name = 'keyCompetency[]';
-                newCompetency.value = competency;
-                newCompetency.style.display = 'none';
-                document.getElementById('competenciesForm').appendChild(newCompetency);
+                // const newCompetency = document.createElement('input');
+                // newCompetency.type = 'hidden';
+                // newCompetency.name = 'keyCompetency[]';
+                // newCompetency.value = competency;
+                // newCompetency.style.display = 'none';
+                // document.getElementById('competenciesForm').appendChild(newCompetency);
             }
         }
 
