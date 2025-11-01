@@ -571,14 +571,14 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 <span>📄</span>
                 Resume Builder
             </a>
-            <button class="btn btn-secondary back-btn" onclick="window.location.href = 'dashboard.php'">
+            <button type="button" class="btn btn-secondary back-btn" onclick="window.location.href = 'dashboard.php'">
                 ← <span>Back to Dashboard</span>
             </button>
         </div>
     </nav>
 
     <div class="container">
-        <form id="resumeForm" method="POST" action="actions/resume/create_resume.php">
+        <form id="resumeForm" method="POST" action="actions/resume/save_resume.php" enctype="multipart/form-data">
         <div class="page-header">
             <h1>Create New Resume</h1>
             <p>Fill in the details below to create your professional resume</p>
@@ -592,7 +592,7 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 </div>
                 <label class="photo-upload-btn">
                     📷 Upload Photo
-                    <input type="file" accept="image/*" onchange="handlePhotoUpload(event)">
+                    <input type="file" name="profilePhoto" accept="image/*" onchange="handlePhotoUpload(event)">
                 </label>
             </div>
         </div>
@@ -603,21 +603,21 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
             </div>
             <div class="section-content">
                 <div class="form-group">
-                    <label>Full Name *</label>
-                    <input type="text" id="fullName" placeholder="Enter your full name" oninput="updatePhotoInitials()">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" oninput="updatePhotoInitials()" required>
                 </div>
                 <div class="form-group">
-                    <label>Address</label>
-                    <input type="text" placeholder="Enter your address">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" placeholder="Enter your address" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Contact Number</label>
-                        <input type="tel" placeholder="Enter contact number">
+                        <label for="phone">Contact Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter contact number" required>
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" placeholder="Enter email address">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter email address" required>
                     </div>
                 </div>
             </div>
@@ -627,12 +627,12 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
             <div class="card form-section" id="objectiveSection" data-section-name="Objective" data-section-icon="🎯">
                 <div class="section-header collapsed" onclick="toggleSection('objectiveContent')">
                     <h3>🎯 Objective <span class="collapse-icon">▼</span></h3>
-                    <div class="section-actions" onclick="event.stopPropagation()">
-                        <button class="delete-section-btn" onclick="deleteSection('objectiveSection')">🗑️ Delete</button>
-                    </div>
+                    <!-- <div class="section-actions" onclick="event.stopPropagation()">
+                        <button type="button" class="delete-section-btn" onclick="deleteSection('objectiveSection')">🗑️ Delete</button>
+                    </div> -->
                 </div>
                 <div class="section-content hidden" id="objectiveContent">
-                    <div class="objective-options">
+                    <!-- <div class="objective-options">
                         <div class="objective-option" onclick="selectObjective(0)">
                             To secure a challenging position where I can utilize my skills and contribute to organizational growth.
                         </div>
@@ -642,10 +642,17 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                         <div class="objective-option" onclick="selectObjective(2)">
                             To obtain a position that allows me to grow professionally while contributing to the success of the organization.
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
-                        <label>Custom Objective</label>
-                        <textarea id="objectiveText" placeholder="Or write your own objective..."></textarea>
+                        <!-- <label>Custom Objective</label> -->
+                        <textarea 
+                        id="objectiveText" 
+                        name="objective" 
+                        placeholder="Or write your own objective..." 
+                        required
+                        >I am a motivated and quick learner seeking an entry-level position in a dynamic organization where I can apply my academic knowledge and develop new skills. My goal is to contribute effectively to the company's success while gaining practical experience and growing professionally. I am eager to work collaboratively with a team that values innovation, creativity, and dedication.
+                    </textarea>
+
                     </div>
                 </div>
             </div>
@@ -654,44 +661,44 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 <div class="section-header collapsed" onclick="toggleSection('educationContent')">
                     <h3>🎓 Educational Qualification <span class="collapse-icon">▼</span></h3>
                     <div class="section-actions" onclick="event.stopPropagation()">
-                        <button class="delete-section-btn" onclick="deleteSection('educationSection')">🗑️ Delete</button>
+                        <button type="button" class="delete-section-btn" onclick="deleteSection('educationSection')">🗑️ Delete</button>
                     </div>
                 </div>
                 <div class="section-content hidden" id="educationContent">
                     <div id="educationRows">
                         <div class="dynamic-section">
-                            <button class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                            <button type="button" class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
                             <div class="form-group">
                                 <label>Degree/Qualification</label>
-                                <input type="text" placeholder="e.g., B.Tech in Computer Science">
+                                <input type="text" name="educationQualification[]" placeholder="e.g., B.Tech in Computer Science" required>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Institution</label>
-                                    <input type="text" placeholder="Enter institution name">
+                                    <input type="text" name="educationInstitution[]" placeholder="Enter institution name" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Year</label>
-                                    <input type="text" placeholder="e.g., 2020-2024">
+                                    <input type="text" name="educationYear[]" placeholder="e.g., 2020-2024" required>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Status</label>
-                                    <select>
-                                        <option value="">Select Status</option>
+                                    <select name="educationStatus[]" required onchange="educationStatusChange(this);">
+                                        <option value="" selected>Select Status</option>
                                         <option value="completed">Completed</option>
                                         <option value="pursuing">Pursuing</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="educationResultB" style="display: none;">
                                     <label>Result</label>
-                                    <input type="text" placeholder="e.g., 8.5 CGPA or 85%">
+                                    <input type="text" name="educationResult[]" placeholder="e.g., 8.5 CGPA or 85%">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="add-more-btn" onclick="addEducationRow()">+ Add More Education</button>
+                    <button type="button" class="add-more-btn" onclick="addEducationRow()">+ Add More Education</button>
                 </div>
             </div>
 
@@ -699,20 +706,20 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 <div class="section-header collapsed" onclick="toggleSection('workContent')">
                     <h3>💼 Work Experience <span class="collapse-icon">▼</span></h3>
                     <div class="section-actions" onclick="event.stopPropagation()">
-                        <button class="delete-section-btn" onclick="deleteSection('workSection')">🗑️ Delete</button>
+                        <button type="button" class="delete-section-btn" onclick="deleteSection('workSection')">🗑️ Delete</button>
                     </div>
                 </div>
                 <div class="section-content hidden" id="workContent">
                     <div id="workRows">
                         <div class="dynamic-section">
-                            <button class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                            <button type="button" class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
                             <div class="form-group">
-                                <label>Work Experience</label>
-                                <input type="text" placeholder="e.g., 6 months experience as Executive in ABC Company">
+                                <!-- <label>Work Experience</label> -->
+                                <input type="text" name="workExperience[]" placeholder="e.g., 6 months experience as Executive in ABC Company">
                             </div>
                         </div>
                     </div>
-                    <button class="add-more-btn" onclick="addWorkRow()">+ Add More Experience</button>
+                    <button type="button" class="add-more-btn" onclick="addWorkRow()">+ Add More Experience</button>
                 </div>
             </div>
 
@@ -720,56 +727,58 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 <div class="section-header collapsed" onclick="toggleSection('skillsContent')">
                     <h3>⚡ Key Skills <span class="collapse-icon">▼</span></h3>
                     <div class="section-actions" onclick="event.stopPropagation()">
-                        <button class="delete-section-btn" onclick="deleteSection('skillsSection')">🗑️ Delete</button>
+                        <button type="button" class="delete-section-btn" onclick="deleteSection('skillsSection')">🗑️ Delete</button>
                     </div>
                 </div>
                 <div class="section-content hidden" id="skillsContent">
                     <div class="skill-input-group">
                         <input type="text" id="skillInput" placeholder="Enter a skill">
-                        <button class="btn btn-primary" onclick="addSkill()">Add Skill</button>
+                        <button type="button" class="btn btn-primary" onclick="addSkill()">Add Skill</button>
                     </div>
                     <div class="skills-container" id="skillsContainer"></div>
+                    <div id="skillsForm" style="display: none !important;"></div>
                 </div>
             </div>
-
+            
             <div class="card form-section" id="competenciesSection" data-section-name="Key Competencies" data-section-icon="🏆">
                 <div class="section-header collapsed" onclick="toggleSection('competenciesContent')">
                     <h3>🏆 Key Competencies <span class="collapse-icon">▼</span></h3>
                     <div class="section-actions" onclick="event.stopPropagation()">
-                        <button class="delete-section-btn" onclick="deleteSection('competenciesSection')">🗑️ Delete</button>
+                        <button type="button" class="delete-section-btn" onclick="deleteSection('competenciesSection')">🗑️ Delete</button>
                     </div>
                 </div>
                 <div class="section-content hidden" id="competenciesContent">
                     <div class="skill-input-group">
                         <input type="text" id="competencyInput" placeholder="Enter a competency">
-                        <button class="btn btn-primary" onclick="addCompetency()">Add Competency</button>
+                        <button type="button" class="btn btn-primary" onclick="addCompetency()">Add Competency</button>
                     </div>
                     <div class="skills-container" id="competenciesContainer"></div>
+                    <div id="competenciesForm" style="display: none !important;"></div>
                 </div>
             </div>
 
             <div class="card form-section" id="personalSection" data-section-name="Personal Details" data-section-icon="📋">
                 <div class="section-header collapsed" onclick="toggleSection('personalContent')">
                     <h3>📋 Personal Details <span class="collapse-icon">▼</span></h3>
-                    <div class="section-actions" onclick="event.stopPropagation()">
-                        <button class="delete-section-btn" onclick="deleteSection('personalSection')">🗑️ Delete</button>
-                    </div>
+                    <!-- <div class="section-actions" onclick="event.stopPropagation()">
+                        <button type="button" class="delete-section-btn" onclick="deleteSection('personalSection')">🗑️ Delete</button>
+                    </div> -->
                 </div>
                 <div class="section-content hidden" id="personalContent">
                     <div class="form-row">
                         <div class="form-group">
                             <label>Father's Name</label>
-                            <input type="text" placeholder="Enter father's name">
+                            <input type="text" name="fatherName" placeholder="Enter father's name">
                         </div>
                         <div class="form-group">
                             <label>Date of Birth</label>
-                            <input type="date">
+                            <input type="date" name="dateOfBirth">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Gender</label>
-                            <select>
+                            <select name="gender">
                                 <option value="">Select Gender</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
@@ -778,7 +787,7 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                         </div>
                         <div class="form-group">
                             <label>Marital Status</label>
-                            <select>
+                            <select name="maritalStatus">
                                 <option value="">Select Status</option>
                                 <option value="single">Single</option>
                                 <option value="married">Married</option>
@@ -788,20 +797,20 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                     <div class="form-row">
                         <div class="form-group">
                             <label>Nationality</label>
-                            <input type="text" placeholder="Enter nationality">
+                            <input type="text" name="nationality" placeholder="Enter nationality">
                         </div>
                         <div class="form-group">
                             <label>Languages Known</label>
-                            <input type="text" placeholder="e.g., English, Hindi">
+                            <input type="text" name="languagesKnown" placeholder="e.g., English, Hindi">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Strength</label>
-                        <textarea placeholder="Describe your strengths..."></textarea>
+                        <textarea name="strengths" placeholder="Describe your strengths..."></textarea>
                     </div>
                     <div class="form-group">
                         <label>Hobbies</label>
-                        <input type="text" placeholder="e.g., Reading, Traveling, Music">
+                        <input type="text" name="hobbies" placeholder="e.g., Reading, Traveling, Music">
                     </div>
                 </div>
             </div>
@@ -809,32 +818,79 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
             <div class="card form-section" id="declarationSection" data-section-name="Declaration" data-section-icon="✍️">
                 <div class="section-header collapsed" onclick="toggleSection('declarationContent')">
                     <h3>✍️ Declaration <span class="collapse-icon">▼</span></h3>
-                    <div class="section-actions" onclick="event.stopPropagation()">
-                        <button class="delete-section-btn" onclick="deleteSection('declarationSection')">🗑️ Delete</button>
-                    </div>
+                    <!-- <div class="section-actions" onclick="event.stopPropagation()">
+                        <button type="button" class="delete-section-btn" onclick="deleteSection('declarationSection')">🗑️ Delete</button>
+                    </div> -->
                 </div>
                 <div class="section-content hidden" id="declarationContent">
                     <div class="form-group">
                         <label>Declaration Text</label>
-                        <textarea id="declarationText">I hereby declare that the information provided above is true and correct to the best of my knowledge and belief.</textarea>
+                        <textarea name="declarationText" id="declarationText">I hereby declare that the information provided above is true and correct to the best of my knowledge and belief.</textarea>
                     </div>
                     <div class="form-group">
                         <label>City</label>
-                        <input type="text" placeholder="Enter city name">
+                        <input type="text" name="city" placeholder="Enter city name" required>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="form-actions">
-            <button class="btn btn-secondary" onclick="handleCancel()">Cancel</button>
-            <button class="btn btn-primary" onclick="handlePreview()">👁️ Preview Resume</button>
+            <button type="button" class="btn btn-secondary" onclick="handleCancel()">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="handlePreview()">👁️ Preview Resume</button>
             <button type="submit" class="btn btn-primary">💾 Save Resume</button>
         </div>
         </form>
     </div>
 
     <script>
+        // Prevent Enter key from submitting the form (except for skill/competency inputs)
+        // Handle Enter key: move to next field instead of submitting form
+        document.getElementById('resumeForm').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                // Allow Enter for textareas (for line breaks)
+                if (e.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+                
+                // For skill and competency inputs, trigger their add functions
+                if (e.target.id === 'skillInput') {
+                    e.preventDefault();
+                    addSkill();
+                    return false;
+                }
+                
+                if (e.target.id === 'competencyInput') {
+                    e.preventDefault();
+                    addCompetency();
+                    return false;
+                }
+                
+                // For all other inputs, move to next input field
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
+                    e.preventDefault();
+                    
+                    // Get all focusable elements in the form
+                    const focusableElements = Array.from(
+                        document.querySelectorAll('#resumeForm input:not([type="file"]), #resumeForm select, #resumeForm textarea')
+                    ).filter(el => {
+                        // Only include visible elements
+                        return el.offsetParent !== null && !el.disabled;
+                    });
+                    
+                    // Find current element index
+                    const currentIndex = focusableElements.indexOf(e.target);
+                    
+                    // Move to next element
+                    if (currentIndex > -1 && currentIndex < focusableElements.length - 1) {
+                        focusableElements[currentIndex + 1].focus();
+                    }
+                    
+                    return false;
+                }
+            }
+        });
+
         const deletedSections = {};
 
         function handlePhotoUpload(event) {
@@ -895,7 +951,7 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                         <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.95rem;">
                             Section "${sectionName}" has been removed
                         </p>
-                        <button class="restore-section-btn" onclick="restoreSection('${sectionId}')">
+                        <button type="button" class="restore-section-btn" onclick="restoreSection('${sectionId}')">
                             ${sectionIcon} Add ${sectionName} Section
                         </button>
                     `;
@@ -924,48 +980,48 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
             }
         }
 
-        let selectedObjectiveIndex = -1;
-        function selectObjective(index) {
-            const options = document.querySelectorAll('.objective-option');
-            options.forEach((opt, i) => {
-                opt.classList.toggle('selected', i === index);
-            });
-            selectedObjectiveIndex = index;
-            document.getElementById('objectiveText').value = options[index].textContent.trim();
-        }
+        // let selectedObjectiveIndex = -1;
+        // function selectObjective(index) {
+        //     const options = document.querySelectorAll('.objective-option');
+        //     options.forEach((opt, i) => {
+        //         opt.classList.toggle('selected', i === index);
+        //     });
+        //     selectedObjectiveIndex = index;
+        //     document.getElementById('objectiveText').value = options[index].textContent.trim();
+        // }
 
         function addEducationRow() {
             const container = document.getElementById('educationRows');
             const newRow = document.createElement('div');
             newRow.className = 'dynamic-section';
             newRow.innerHTML = `
-                <button class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                <button type="button" class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
                 <div class="form-group">
                     <label>Degree/Qualification</label>
-                    <input type="text" placeholder="e.g., B.Tech in Computer Science">
+                    <input type="text" name="educationQualification[]" placeholder="e.g., B.Tech in Computer Science" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Institution</label>
-                        <input type="text" placeholder="Enter institution name">
+                        <input type="text" name="educationInstitution[]" placeholder="Enter institution name" required>
                     </div>
                     <div class="form-group">
                         <label>Year</label>
-                        <input type="text" placeholder="e.g., 2020-2024">
+                        <input type="text" name="educationYear[]" placeholder="e.g., 2020-2024" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Status</label>
-                        <select>
-                            <option value="">Select Status</option>
+                        <select name="educationStatus[]" required onchange="educationStatusChange(this);">
+                            <option value="" selected>Select Status</option>
                             <option value="completed">Completed</option>
                             <option value="pursuing">Pursuing</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="educationResultB" style="display: none;">
                         <label>Result</label>
-                        <input type="text" placeholder="e.g., 8.5 CGPA or 85%">
+                        <input type="text" name="educationResult[]" placeholder="e.g., 8.5 CGPA or 85%">
                     </div>
                 </div>
             `;
@@ -977,10 +1033,10 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
             const newRow = document.createElement('div');
             newRow.className = 'dynamic-section';
             newRow.innerHTML = `
-                <button class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
+                <button type="button" class="remove-row-btn" onclick="removeRow(this)">✕ Remove</button>
                 <div class="form-group">
-                    <label>Work Experience</label>
-                    <input type="text" placeholder="e.g., 6 months experience as Executive in ABC Company">
+                    <!-- <label>Work Experience</label> -->
+                    <input type="text" name="workExperience[]" placeholder="e.g., 6 months experience as Executive in ABC Company">
                 </div>
             `;
             container.appendChild(newRow);
@@ -1006,6 +1062,13 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 tag.innerHTML = `${skill} <span class="remove-skill" onclick="removeTag(this)">✕</span>`;
                 container.appendChild(tag);
                 input.value = '';
+
+                const newSkill = document.createElement('input');
+                newSkill.type = 'hidden';
+                newSkill.name = 'keySkill[]';
+                newSkill.value = skill;
+                newSkill.style.display = 'none';
+                document.getElementById('skillsForm').appendChild(newSkill);
             }
         }
 
@@ -1019,6 +1082,13 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
                 tag.innerHTML = `${competency} <span class="remove-skill" onclick="removeTag(this)">✕</span>`;
                 container.appendChild(tag);
                 input.value = '';
+
+                const newCompetency = document.createElement('input');
+                newCompetency.type = 'hidden';
+                newCompetency.name = 'keyCompetency[]';
+                newCompetency.value = competency;
+                newCompetency.style.display = 'none';
+                document.getElementById('competenciesForm').appendChild(newCompetency);
             }
         }
 
@@ -1061,6 +1131,16 @@ if(!isset($_SESSION['id']) or !isset($_SESSION['phone'])){
         //         alert('Redirecting to Dashboard...');
         //     }
         // }
+        function educationStatusChange(element) {
+            const closestSection = element.closest('.dynamic-section');
+            const status = element.value;
+            const resultB = closestSection.querySelector('#educationResultB');
+            if (status === 'completed') {
+                resultB.style.display = 'block';
+            } else {
+                resultB.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>
