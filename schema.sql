@@ -81,3 +81,13 @@ CREATE TABLE competencies (
     competency_name VARCHAR(100) NOT NULL,
     FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
 );
+
+CREATE TABLE feedback (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    feedback TEXT NOT NULL,
+    status ENUM('pending', 'replied') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    replied_at TIMESTAMP NULL DEFAULT NULL
+);
