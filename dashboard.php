@@ -47,7 +47,7 @@ $other_resumes = mysqli_fetch_all($result2, MYSQLI_ASSOC);
     <div class="container">
         <!-- My Resume Section -->
         <?php if (!empty($my_resume)): ?>
-        <div class="my-resume-section">
+        <div class="my-resume-section" id="resume-<?php echo $my_resume['id']; ?>">
             <h2 class="section-title">My Resume</h2>
             <div class="card my-resume-card">
                 <div class="my-resume-content">
@@ -62,11 +62,11 @@ $other_resumes = mysqli_fetch_all($result2, MYSQLI_ASSOC);
                         <div class="my-resume-name"><?php echo $my_resume['full_name']; ?></div>
                         <!-- <div class="my-resume-status"><?php echo $my_resume['job_title']; ?></div> -->
                         <div class="my-resume-actions">
-                            <button class="btn btn-sm" onclick="handleDownload('<?php echo $my_resume['full_name']; ?>')">📥 Download</button>
-                            <button class="btn btn-sm" onclick="handleShare('<?php echo $my_resume['full_name']; ?>')">🔗 Share</button>
-                            <button class="btn btn-sm" onclick="showEditModal('<?php echo $my_resume['full_name']; ?>')">✏️ Edit</button>
-                            <button class="btn btn-sm" onclick="handleView('<?php echo $my_resume['full_name']; ?>')">👁️ View</button>
-                            <button class="btn btn-sm" onclick="showDeleteModal('<?php echo $my_resume['full_name']; ?>')">🗑️ Delete</button>
+                            <button class="btn btn-sm" onclick="window.location.href='resume.php?id=<?php echo $my_resume['id']; ?>'">📥 Download</button>
+                            <button class="btn btn-sm" onclick="handleShare('<?php echo $my_resume['id']; ?>')">🔗 Share</button>
+                            <button class="btn btn-sm" onclick="showEditModal('<?php echo $my_resume['full_name']; ?>', '<?php echo $my_resume['id']; ?>')">✏️ Edit</button>
+                            <button class="btn btn-sm" onclick="window.open('resume.php?id=<?php echo $my_resume['id']; ?>', '_blank')" title="View">👁️ View</button>
+                        <button class="icon-btn icon-btn-delete" onclick="showDeleteModal('<?php echo $my_resume['full_name']; ?>','<?php echo $my_resume['id']; ?>')">🗑️ Delete</button>
                         </div>
                     </div>
                 </div>

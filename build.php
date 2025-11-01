@@ -50,27 +50,27 @@ if($req == 'edit'){
         $stmt->bind_param("i", $resume_id);
         $stmt->execute();
         $experience = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-
-        $full_name = $resume['full_name']?? '';
-        $photo_path = $resume['profile_photo']?? '';
-        $phone = $resume['phone']?? '';
-        $email = $resume['email']?? '';
-        $address = $resume['address']?? '';
-        $objective = $resume['objective']?? '';
-        $father_name = $resume['father_name']?? '';
-        $dob = $resume['date_of_birth']?? '';
-        $gender = $resume['gender']?? '';
-        $marital_status = $resume['marital_status']?? '';
-        $nationality = $resume['nationality']?? '';
-        $languages_known = $resume['languages_known']?? '';
-        $strengths = $resume['strengths']?? '';
-        $hobbies = $resume['hobbies']?? '';
-        $declaration_text = $resume['declaration_text']?? '';
-        $declaration_city = $resume['declaration_city']?? '';
     } catch (Exception $e) {
         die("Error: " . $e->getMessage());
     }
 }
+
+$full_name = $resume['full_name']?? '';
+$photo_path = $resume['profile_photo']?? '';
+$phone = $resume['phone']?? '';
+$email = $resume['email']?? '';
+$address = $resume['address']?? '';
+$objective = $resume['objective']?? '';
+$father_name = $resume['father_name']?? '';
+$dob = $resume['date_of_birth']?? '';
+$gender = $resume['gender']?? '';
+$marital_status = $resume['marital_status']?? '';
+$nationality = $resume['nationality']?? '';
+$languages_known = $resume['languages_known']?? '';
+$strengths = $resume['strengths']?? '';
+$hobbies = $resume['hobbies']?? '';
+$declaration_text = $resume['declaration_text']?? '';
+$declaration_city = $resume['declaration_city']?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -360,11 +360,11 @@ if($req == 'edit'){
                     <div class="form-row">
                         <div class="form-group">
                             <label>Father's Name</label>
-                            <input type="text" name="fatherName" value="<?php echo htmlspecialchars($resume['father_name']); ?>" placeholder="Enter father's name">
+                            <input type="text" name="fatherName" value="<?php echo htmlspecialchars($father_name); ?>" placeholder="Enter father's name">
                         </div>
                         <div class="form-group">
                             <label>Date of Birth</label>
-                            <input type="date" value="<?php echo htmlspecialchars($resume['date_of_birth']); ?>" name="dateOfBirth">
+                            <input type="date" value="<?php echo htmlspecialchars($dob); ?>" name="dateOfBirth">
                         </div>
                     </div>
                     <div class="form-row">
@@ -372,38 +372,38 @@ if($req == 'edit'){
                             <label>Gender</label>
                             <select name="gender">
                                 <option value="">Select Gender</option>
-                                <option <?php echo $resume['gender'] == 'male' ? 'selected' : ''; ?> value="male">Male</option>
-                                <option <?php echo $resume['gender'] == 'female' ? 'selected' : ''; ?> value="female">Female</option>
-                                <option <?php echo $resume['gender'] == 'other' ? 'selected' : ''; ?> value="other">Other</option>
+                                <option <?php echo $gender == 'male' ? 'selected' : ''; ?> value="male">Male</option>
+                                <option <?php echo $gender == 'female' ? 'selected' : ''; ?> value="female">Female</option>
+                                <option <?php echo $gender == 'other' ? 'selected' : ''; ?> value="other">Other</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Marital Status</label>
                             <select name="maritalStatus">
                                 <option value="">Select Status</option>
-                                <option <?php echo $resume['marital_status'] == 'single' ? 'selected' : ''; ?> value="single">Single</option>
-                                <option <?php echo $resume['marital_status'] == 'married' ? 'selected' : ''; ?> value="married">Married</option>
-                                <option <?php echo $resume['marital_status'] == 'other' ? 'selected' : ''; ?> value="other">Other</option>
+                                <option <?php echo $marital_status == 'single' ? 'selected' : ''; ?> value="single">Single</option>
+                                <option <?php echo $marital_status == 'married' ? 'selected' : ''; ?> value="married">Married</option>
+                                <option <?php echo $marital_status == 'other' ? 'selected' : ''; ?> value="other">Other</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Nationality</label>
-                            <input type="text" name="nationality" value="<?php echo htmlspecialchars($resume['nationality']); ?>" placeholder="Enter nationality">
+                            <input type="text" name="nationality" value="<?php echo htmlspecialchars($nationality); ?>" placeholder="Enter nationality">
                         </div>
                         <div class="form-group">
                             <label>Languages Known</label>
-                            <input type="text" name="languagesKnown" value="<?php echo htmlspecialchars($resume['languages_known']); ?>" placeholder="e.g., English, Hindi">
+                            <input type="text" name="languagesKnown" value="<?php echo htmlspecialchars($languages_known); ?>" placeholder="e.g., English, Hindi">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Strength</label>
-                        <textarea name="strengths" value="<?php echo htmlspecialchars($resume['strengths']); ?>" placeholder="Describe your strengths..."></textarea>
+                        <textarea name="strengths" value="<?php echo htmlspecialchars($strengths); ?>" placeholder="Describe your strengths..."></textarea>
                     </div>
                     <div class="form-group">
                         <label>Hobbies</label>
-                        <input type="text" name="hobbies" value="<?php echo htmlspecialchars($resume['hobbies']); ?>" placeholder="e.g., Reading, Traveling, Music">
+                        <input type="text" name="hobbies" value="<?php echo htmlspecialchars($hobbies); ?>" placeholder="e.g., Reading, Traveling, Music">
                     </div>
                 </div>
             </div>
@@ -418,11 +418,11 @@ if($req == 'edit'){
                 <div class="section-content hidden" id="declarationContent">
                     <div class="form-group">
                         <label>Declaration Text</label>
-                        <textarea name="declarationText" id="declarationText"><?php echo htmlspecialchars($resume['declaration_text'] ?? 'I hereby declare that the information provided above is true and correct to the best of my knowledge and belief.'); ?></textarea>
+                        <textarea name="declarationText" id="declarationText"><?php echo htmlspecialchars($declaration_text ?? 'I hereby declare that the information provided above is true and correct to the best of my knowledge and belief.'); ?></textarea>
                     </div>
                     <div class="form-group">
                         <label>City</label>
-                        <input type="text" name="city" value="<?php echo htmlspecialchars($resume['declaration_city']); ?>" placeholder="Enter city name" required>
+                        <input type="text" name="city" value="<?php echo htmlspecialchars($declaration_city); ?>" placeholder="Enter city name" required>
                     </div>
                 </div>
             </div>
