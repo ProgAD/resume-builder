@@ -83,7 +83,7 @@ $declaration_city = $resume['declaration_city']?? '';
 <body>
     <nav class="navbar">
         <div class="container navbar-content">
-            <a href="#" class="navbar-brand">
+            <a href="dashboard.php" class="navbar-brand">
                 <span>📄</span>
                 Resume Builder
             </a>

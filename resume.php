@@ -98,7 +98,7 @@ try {
         <div id="resumeContent">
             <!-- Header -->
             <div class="header-section">
-                <div class="profile-photo">
+                <div class="profile-photo" <?php echo !empty($resume['profile_photo']) ? 'style="display: none";' : ''; ?>>
                     <?php if (!empty($resume['profile_photo'])): ?>
                     <img src="<?php echo $resume['profile_photo']; ?>">
                     <?php else: ?>
