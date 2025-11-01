@@ -1,0 +1,608 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: #f5f7fa;
+    min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    color: #1f2937;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+/* Colors */
+:root {
+    --primary-color: #0D9488;
+    --primary-dark: #0a7a70;
+    --secondary-color: #64748b;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --bg-light: #f5f7fa;
+    --border-color: #e5e7eb;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+}
+
+.btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+.btn-sm {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+}
+
+/* Cards */
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Grid System */
+.grid {
+    display: grid;
+    gap: 20px;
+}
+
+.grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 768px) {
+    .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .grid-cols-3, .grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Utilities */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+.text-center { text-align: center; }
+.text-muted { color: var(--text-secondary); }
+.flex { display: flex; }
+.justify-between { justify-content: space-between; }
+.align-center { align-items: center; }
+.gap-2 { gap: 0.5rem; }
+
+/* ==================== DASHBOARD SPECIFIC STYLES ==================== */
+
+/* Header/Navbar */
+.navbar {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 15px 0;
+    margin-bottom: 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    overflow: hidden; /* ADD THIS */
+    position: relative; /* ADD THIS */
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.logout-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+}
+
+/* My Resume Section */
+.my-resume-section {
+    margin-bottom: 40px;
+}
+
+.my-resume-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border-radius: 16px;
+    padding: 30px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.my-resume-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.my-resume-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(13, 148, 136, 0.4);
+}
+
+.my-resume-content {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.my-resume-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    overflow: hidden; /* ADD THIS */
+    position: relative; /* ADD THIS */
+}
+
+/* ADD THIS NEW RULE */
+.my-resume-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* ADD THIS NEW RULE */
+.my-resume-avatar span {
+    position: relative;
+    z-index: 1;
+}
+
+.my-resume-info {
+    flex: 1;
+}
+
+.my-resume-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.my-resume-status {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+
+.my-resume-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.my-resume-actions .btn {
+    background: white;
+    color: var(--primary-color);
+}
+
+.my-resume-actions .btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* Others Section */
+.others-section {
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+/* Resume Card */
+.resume-card {
+    text-align: center;
+    position: relative;
+}
+
+.resume-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 auto 15px;
+    overflow: hidden; /* ADD THIS */
+    position: relative; /* ADD THIS */
+}
+
+/* ADD THIS NEW RULE */
+.resume-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* ADD THIS NEW RULE */
+.resume-avatar span {
+    position: relative;
+    z-index: 1;
+}
+
+.resume-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.resume-status {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+}
+
+.resume-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.resume-actions .btn-primary {
+    width: 100%;
+}
+
+/* Icon Actions Row */
+.icon-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.icon-btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    border: none;
+    font-weight: 600;
+}
+
+.icon-btn-share {
+    background: #3b82f6;
+    color: white;
+}
+
+.icon-btn-share:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+
+.icon-btn-edit {
+    background: #64748b;
+    color: white;
+}
+
+.icon-btn-edit:hover {
+    background: #475569;
+    transform: translateY(-2px);
+}
+
+.icon-btn-view {
+    background: #10b981;
+    color: white;
+}
+
+.icon-btn-view:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.icon-btn-delete {
+    background: #ef4444;
+    color: white;
+}
+
+.icon-btn-delete:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+}
+
+/* Create New Card */
+.create-card {
+    border: 2px dashed var(--primary-color);
+    background: rgba(13, 148, 136, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.create-card:hover {
+    background: rgba(13, 148, 136, 0.1);
+    border-color: var(--primary-dark);
+    transform: translateY(-3px);
+}
+
+.create-icon {
+    width: 70px;
+    height: 70px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.create-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+}
+
+.modal-message {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-btn-cancel {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.modal-btn-cancel:hover {
+    background: #d1d5db;
+}
+
+.modal-btn-confirm {
+    background: var(--primary-color);
+    color: white;
+}
+
+.modal-btn-confirm:hover {
+    background: var(--primary-dark);
+}
+
+.modal-btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.modal-btn-danger:hover {
+    background: #dc2626;
+}
+
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .my-resume-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .my-resume-name {
+        font-size: 1.3rem;
+    }
+
+    .my-resume-actions {
+        justify-content: center;
+    }
+
+    .my-resume-actions .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+}

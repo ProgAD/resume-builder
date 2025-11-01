@@ -12,6 +12,7 @@ USE resume_builder
 
 CREATE TABLE resumes (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    type TINYINT NOT NULL DEFAULT 0,
     user_id INT NOT NULL,
     
     -- Basic Info
