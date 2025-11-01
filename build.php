@@ -17,7 +17,6 @@ if($req == 'edit'){
         exit();
     }
     $resume_id = $_GET['id'];
-
     require 'config/db.php';
 
     try {
@@ -96,8 +95,9 @@ if($req == 'edit'){
 
     <div class="container">
         <form id="resumeForm" method="POST" action="<?php echo $req == 'new' ? 'actions/resume/save_resume.php' : 'actions/resume/update_resume.php'; ?>" enctype="multipart/form-data">
+        <?php if($req == 'edit'){ echo '<input type="hidden" name="resumeId" value="'.$resume_id.'">'; } ?>
         <div class="page-header">
-            <h1>Create New Resume</h1>
+            <h1><?php echo $req == 'new' ? 'Create New Resume' : 'Edit Resume'; ?></h1>
             <p>Fill in the details below to create your professional resume</p>
         </div>
 
